@@ -12,7 +12,7 @@ import clsx from "clsx";
 
 const navItems = [
   { href: "/", label: "Home", icon: HomeIcon },
-  { href: "/create-route", label: "Create Route", icon: MapPinIcon },
+  { href: "/route", label: "Create Route", icon: MapPinIcon },
   { href: "/profile", label: "Profile", icon: UserCircleIcon },
 ];
 
