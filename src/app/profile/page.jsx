@@ -7,19 +7,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { UserIcon } from "lucide-react";
+import { UploadButton } from "@/utils/uploadthing";
 
 export default function ProfilePage() {
   const [gender, setGender] = useState("male");
   const [profileImage, setProfileImage] = useState(null);
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
-    }
-  };
-
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
@@ -37,34 +29,58 @@ export default function ProfilePage() {
       </p>
 
       {/* Profile Image Upload */}
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-32 h-32 rounded-full border border-[#a5d6a7] overflow-hidden flex items-center justify-center bg-[#c8e6c9]">
-          {profileImage ? (
-            <img
-              src={profileImage}
-              alt="Profile Preview"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <UserIcon className="w-12 h-12 text-[#558b2f]" />
-          )}
-        </div>
+<div className="flex flex-col items-center gap-4">
+  <div className="w-32 h-32 rounded-full border border-[#a5d6a7] overflow-hidden flex items-center justify-center bg-[#c8e6c9]">
+    {profileImage ? (
+      <img
+        src={profileImage}
+        alt="Profile Preview"
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <UserIcon className="w-12 h-12 text-[#558b2f]" />
+    )}
+  </div>
 
-        <div>
-          <Input
-            id="upload"
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="hidden"
-          />
-          <Label htmlFor="upload">
-            <Button className="bg-[#388e3c] hover:bg-[#2e7d32] text-white">
-              Upload Profile Picture
-            </Button>
-          </Label>
-        </div>
-      </div>
+  <div>
+    <UploadButton
+      endpoint="imageUploader"
+      onClientUploadComplete={(res) => {
+        console.log("Files: ", res);
+        alert("Upload Completed");
+        setProfileImage(res?.[0]?.url); // update profile image
+      }}
+      onUploadError={(error) => {
+        alert(`ERROR! ${error.message}`);
+      }}
+      appearance={{
+        button: {
+          backgroundColor: "#388e3c",
+          color: "white",
+          padding: "6px 12px",
+          borderRadius: "6px",
+          fontSize: "14px",
+          fontWeight: "500",
+          border: "none",
+          cursor: "pointer",
+          minWidth: "180px",
+        },
+        container: {
+          display: "flex",
+          justifyContent: "center",
+        },
+      }}
+      content={{
+        button({ isUploading }) {
+          if (isUploading) return "Uploading...";
+          if (profileImage) return "Change Profile Picture";
+          return "Upload Profile Picture";
+        },
+      }}
+    />
+  </div>
+</div>
+
 
       {/* Name */}
       <div className="space-y-2">
