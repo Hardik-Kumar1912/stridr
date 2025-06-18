@@ -1,12 +1,11 @@
 export async function getRoute(
   user_location_cords, // [lon, lat]
-  route_distance, // desired total round-trip length in meters
-  poiCount, // number of POI areas in featureCollection
-  featureCollection // GeoJSON FeatureCollection to influence routing
+  route_distance,
+  poiCount,
+  featureCollection
 ) {
   const url = "http://localhost:8989/route";
 
-  // Build custom_model
   const customModel = {
     priority: Array.from({ length: poiCount }, (_, i) => ({
       if: `in_poi_${i} == false`,
@@ -17,7 +16,7 @@ export async function getRoute(
   };
 
   const payload = {
-    points: [user_location_cords], // start from here
+    points: [user_location_cords],
     profile: "car",
     algorithm: "round_trip",
     "round_trip.distance": route_distance,

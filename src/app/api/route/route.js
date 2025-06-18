@@ -6,12 +6,6 @@ import { getRoute } from "./getRoute.js";
 export async function POST(req) {
   console.log("Received request to modify route");
   const { user_location_cords, route_distance } = await req.json();
-  //   EXMAPLE
-  //   {
-  //   "user_location_cords": [28.6139, 77.2090],
-  //   "route_distance": 2500
-  // }
-
   const pois = await fetchPOIs(user_location_cords, route_distance / 2);
   const featureCollection = await getFeatureCollection(pois);
   const route = getRoute(
