@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { UserIcon } from "lucide-react";
 import { UploadButton } from "@/utils/uploadthing";
+import Map from "@/components/Map";
 
 export default function ProfilePage() {
   const [gender, setGender] = useState("male");
@@ -141,6 +142,7 @@ export default function ProfilePage() {
       <Button className="w-full mt-4 bg-[#388e3c] hover:bg-[#2e7d32] text-white">
         Save Profile
       </Button>
+      <Map />
     </main>
   );
 }
