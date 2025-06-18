@@ -20,7 +20,7 @@ export async function getRoute(
     points: [user_location_cords], // start from here
     profile: "car",
     algorithm: "round_trip",
-    round_trip_distance: route_distance,
+    "round_trip.distance": route_distance,
     "ch.disable": true,
     custom_model: customModel,
   };
