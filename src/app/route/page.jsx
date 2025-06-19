@@ -5,11 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useRouter } from "next/navigation";
 
 export default function CreateRoutePage() {
+  const router = useRouter();
+
   const [tripType, setTripType] = useState("round");
   const [mounted, setMounted] = useState(false);
   const [startLocation, setStartLocation] = useState("");
+  const [destination, setDestination] = useState("");
+  const [distance, setDistance] = useState("");
+  const [time, setTime] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -43,6 +50,58 @@ export default function CreateRoutePage() {
       );
     } else {
       alert("Geolocation is not supported by your browser.");
+    }
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+
+    try {
+      if (!("geolocation" in navigator)) {
+        alert("Geolocation not supported by your browser.");
+        return;
+      }
+
+      const coords = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+        });
+      });
+
+      const { latitude, longitude } = coords.coords;
+
+      const res = await fetch("/api/route/route", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_location_cords: [longitude, latitude],
+          route_distance: Number(distance) * 1000,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!data?.points) {
+        throw new Error("No route generated");
+      }
+
+      const polyline = data.points;
+
+      router.push(
+        `/result?polyline=${encodeURIComponent(
+          polyline
+        )}&distance=${distance}&time=${time}&start=Your+Location&destination=${
+          tripType === "destination" ? destination : ""
+        }&tripType=${tripType}&calories=${Math.floor(distance * 60)}`
+      );
+    } catch (error) {
+      console.error("Route generation failed:", error);
+      alert("Failed to generate route. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -95,24 +154,47 @@ export default function CreateRoutePage() {
             {tripType === "destination" && (
               <div className="space-y-2">
                 <Label htmlFor="destination">Destination</Label>
-                <Input id="destination" placeholder="Enter destination" />
+                <Input
+                  id="destination"
+                  placeholder="Enter destination"
+                  value={destination}
+                  onChange={(e) => setDestination(e.target.value)}
+                />
               </div>
             )}
 
             {/* Distance */}
             <div className="space-y-2">
               <Label htmlFor="distance">Target Distance (in km)</Label>
-              <Input id="distance" type="number" placeholder="e.g. 5" />
+              <Input
+                id="distance"
+                type="number"
+                placeholder="e.g. 5"
+                value={distance}
+                onChange={(e) => setDistance(e.target.value)}
+              />
             </div>
 
             {/* Time */}
             <div className="space-y-2">
               <Label htmlFor="time">Expected Time (in minutes)</Label>
-              <Input id="time" type="number" placeholder="e.g. 30" />
+              <Input
+                id="time"
+                type="number"
+                placeholder="e.g. 30"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
             </div>
 
             {/* Submit Button */}
-            <Button className="w-full mt-4">Next</Button>
+            <Button
+              className="w-full mt-4"
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {loading ? "Creating..." : "Next"}
+            </Button>
           </div>
         </div>
 
