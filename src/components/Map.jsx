@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import polyline from "@mapbox/polyline";
 
-const RouteMap = ({ encodedPolyline }: { encodedPolyline: string }) => {
+const RouteMap = ({ encodedPolyline }) => {
   const decoded = polyline.decode(encodedPolyline); // [ [lat, lon], ... ]
 
   return (
@@ -24,3 +24,5 @@ const RouteMap = ({ encodedPolyline }: { encodedPolyline: string }) => {
 };
 
 export default RouteMap;
+
+// <RouteMap encodedPolyline="}ssmDg{fvMBe@dITJDFJDL?...etc" />
