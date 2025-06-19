@@ -15,5 +15,5 @@ export async function POST(req) {
     featureCollection
   );
 
-  return Response.json({route});
+  return Response.json({ route });
 }
