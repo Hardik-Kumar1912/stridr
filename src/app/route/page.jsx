@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
+import { useRoute } from "@/context/RouteContext";
+
 
 export default function CreateRoutePage() {
   const router = useRouter();
@@ -17,6 +19,8 @@ export default function CreateRoutePage() {
   const [distance, setDistance] = useState("");
   const [time, setTime] = useState("");
   const [loading, setLoading] = useState(false);
+  const { setPolyline } = useRoute();
+
 
   useEffect(() => {
     setMounted(true);
@@ -71,32 +75,32 @@ export default function CreateRoutePage() {
 
       const { latitude, longitude } = coords.coords;
 
-      const res = await fetch("/api/route/route", {
+      const res = await fetch("/api/route", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           user_location_cords: [longitude, latitude],
-          route_distance: Number(distance) * 1000,
+          route_distance: Number(distance),
         }),
       });
 
       const data = await res.json();
 
-      if (!data?.points) {
+      console.log("Full API Response from frontend :", data);
+
+      if (!data?.route[0].points) {
         throw new Error("No route generated");
       }
 
-      const polyline = data.points;
+      const polyline = data.route[0].points;
 
-      router.push(
-        `/result?polyline=${encodeURIComponent(
-          polyline
-        )}&distance=${distance}&time=${time}&start=Your+Location&destination=${
-          tripType === "destination" ? destination : ""
-        }&tripType=${tripType}&calories=${Math.floor(distance * 60)}`
-      );
+      setPolyline(polyline);
+
+      console.log("Saved polyline to context ( console from frontend ) :", polyline);
+
+      router.push("/result");
     } catch (error) {
       console.error("Route generation failed:", error);
       alert("Failed to generate route. Please try again.");

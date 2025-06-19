@@ -8,22 +8,26 @@ import {
   Popup,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import polyline from "@mapbox/polyline";
+import mapboxPolyline from "@mapbox/polyline";
 import { useEffect, useState } from "react";
+import { useRoute } from "@/context/RouteContext";
 
-const RouteMap = ({ encodedPolyline }) => {
+const RouteMap = () => {
+  const { polyline } = useRoute();
   const [decodedPath, setDecodedPath] = useState([]);
 
   useEffect(() => {
-    if (encodedPolyline) {
+    if (typeof polyline === "string" && polyline.length > 0) {
       try {
-        const decoded = polyline.decode(encodedPolyline); // [ [lat, lng], ... ]
+        const decoded = mapboxPolyline.decode(polyline);
         setDecodedPath(decoded);
       } catch (err) {
         console.error("Failed to decode polyline:", err);
       }
+    } else {
+      console.warn("Invalid or empty polyline in context:", polyline);
     }
-  }, [encodedPolyline]);
+  }, [polyline]);
 
   if (!decodedPath.length) return <p>Loading map...</p>;
 
@@ -53,5 +57,6 @@ const RouteMap = ({ encodedPolyline }) => {
 };
 
 export default RouteMap;
+
 
 // <RouteMap encodedPolyline="}ssmDg{fvMBe@dITJDFJDL?...etc" />

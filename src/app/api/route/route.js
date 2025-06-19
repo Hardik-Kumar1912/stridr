@@ -8,7 +8,7 @@ export async function POST(req) {
   const { user_location_cords, route_distance } = await req.json();
   const pois = await fetchPOIs(user_location_cords, route_distance / 2);
   const featureCollection = await getFeatureCollection(pois);
-  const route = getRoute(
+  const route = await getRoute(
     user_location_cords,
     route_distance,
     pois.length,
