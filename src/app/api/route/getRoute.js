@@ -17,7 +17,7 @@ export async function getRoute(
 
   const payload = {
     points: [user_location_cords],
-    profile: "car",
+    profile: "foot",
     algorithm: "round_trip",
     "round_trip.distance": route_distance,
     "ch.disable": true,

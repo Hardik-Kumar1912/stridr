@@ -1,6 +1,3 @@
-import { Console } from "console";
-
-// src/app/api/pois/fetch-pois.js
 export async function fetchPOIs([lon, lat], radius) {
   console.log(`Fetching POIs around ${lat}, ${lon} with radius ${radius}`);
   const overpassUrl = `https://overpass-api.de/api/interpreter`;
