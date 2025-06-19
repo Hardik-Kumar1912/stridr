@@ -4,7 +4,9 @@ export async function getRoute(
   poiCount,
   featureCollection
 ) {
-  const url = "http://localhost:8989/route";
+  const GRAPHHOPPER_HOST_URL =
+    process.env.GRAPHHOPPER_HOST_URL || "http://localhost:8989";
+  const url = `${GRAPHHOPPER_HOST_URL}/route`;
 
   const customModel = {
     priority: Array.from({ length: poiCount }, (_, i) => ({
