@@ -11,6 +11,8 @@ import "leaflet/dist/leaflet.css";
 import mapboxPolyline from "@mapbox/polyline";
 import { useEffect, useState } from "react";
 import { useRoute } from "@/context/RouteContext";
+import L from "leaflet";
+import "@fortawesome/fontawesome-free/css/all.min.css"; // FontAwesome for vector icon
 
 const RouteMap = () => {
   const { polyline } = useRoute();
@@ -32,7 +34,14 @@ const RouteMap = () => {
   if (!decodedPath.length) return <p>Loading map...</p>;
 
   const start = decodedPath[0];
-  const end = decodedPath[decodedPath.length - 1];
+
+  // Custom vector start icon
+  const startIcon = new L.DivIcon({
+    html: `<div style="font-size: 24px; color: green;"><i class="fas fa-map-marker-alt"></i></div>`,
+    className: "custom-start-marker",
+    iconSize: [24, 24],
+    iconAnchor: [12, 24],
+  });
 
   return (
     <MapContainer
@@ -46,17 +55,12 @@ const RouteMap = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Polyline positions={decodedPath} color="blue" />
-      <Marker position={start}>
+
+      <Marker position={start} icon={startIcon}>
         <Popup>Start</Popup>
-      </Marker>
-      <Marker position={end}>
-        <Popup>End</Popup>
       </Marker>
     </MapContainer>
   );
 };
 
 export default RouteMap;
-
-
-// <RouteMap encodedPolyline="}ssmDg{fvMBe@dITJDFJDL?...etc" />

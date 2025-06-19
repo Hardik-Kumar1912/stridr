@@ -82,7 +82,7 @@ export default function CreateRoutePage() {
         },
         body: JSON.stringify({
           user_location_cords: [longitude, latitude],
-          route_distance: Number(distance),
+          route_distance: Number(distance)*1000,
         }),
       });
 
