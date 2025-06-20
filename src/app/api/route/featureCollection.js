@@ -5,26 +5,45 @@ export async function getFeatureCollection(pois) {
     return {};
   }
   console.log("Points of interest:", pois);
-  const features = pois.map((poi, index) => {
+  const features = [];
+  pois.forEach((poi, index) => {
     if (!Array.isArray(poi) || poi.length !== 2) {
       throw new Error("Invalid POI coordinates");
     }
-    return {
+    // Primary POI: +-0.0004
+    features.push({
       type: "Feature",
-      id: `poi_${index}`,
+      id: `primary_poi_${index}`,
       geometry: {
         type: "Polygon",
         coordinates: [
           [
-            [poi[0] - 0.01, poi[1] - 0.01],
-            [poi[0] + 0.01, poi[1] - 0.01],
-            [poi[0] + 0.01, poi[1] + 0.01],
-            [poi[0] - 0.01, poi[1] + 0.01],
-            [poi[0] - 0.01, poi[1] - 0.01],
+            [poi[0] - 0.0004, poi[1] - 0.0004],
+            [poi[0] + 0.0004, poi[1] - 0.0004],
+            [poi[0] + 0.0004, poi[1] + 0.0004],
+            [poi[0] - 0.0004, poi[1] + 0.0004],
+            [poi[0] - 0.0004, poi[1] - 0.0004],
           ],
         ],
       },
-    };
+    });
+    // Secondary POI: +-0.0007
+    features.push({
+      type: "Feature",
+      id: `secondary_poi_${index}`,
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [
+            [poi[0] - 0.0007, poi[1] - 0.0007],
+            [poi[0] + 0.0007, poi[1] - 0.0007],
+            [poi[0] + 0.0007, poi[1] + 0.0007],
+            [poi[0] - 0.0007, poi[1] + 0.0007],
+            [poi[0] - 0.0007, poi[1] - 0.0007],
+          ],
+        ],
+      },
+    });
   });
   const featureCollection = {
     type: "FeatureCollection",

@@ -9,10 +9,19 @@ export async function getRoute(
   const url = `${GRAPHHOPPER_HOST_URL}/route`;
 
   const customModel = {
-    priority: Array.from({ length: poiCount }, (_, i) => ({
-      if: `in_poi_${i} == false`,
-      multiply_by: "0.1",
-    })),
+    priority: Array.from(
+      { length: poiCount },
+      (_, i) => (
+        {
+          if: `in_primary_poi_${i}`,
+          multiply_by: "2",
+        },
+        {
+          if: `in_secondary_poi_${i}`,
+          multiply_by: "1.5",
+        }
+      )
+    ),
     areas: featureCollection,
     distance_influence: 100,
   };
@@ -25,6 +34,11 @@ export async function getRoute(
     "ch.disable": true,
     custom_model: customModel,
   };
+
+  console.log(
+    "Fetching round-trip route with payload:",
+    JSON.stringify(payload)
+  );
 
   try {
     const res = await fetch(url, {
