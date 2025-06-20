@@ -1,9 +1,25 @@
 "use client";
 
-import { HomeIcon, MapPinIcon, UserCircleIcon, ZapIcon } from "lucide-react";
+import { useState } from "react";
+import {
+  HomeIcon,
+  MapPinIcon,
+  UserCircleIcon,
+  ZapIcon,
+  MenuIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 const navItems = [
   { href: "/", label: "Home", icon: HomeIcon },
@@ -27,8 +43,8 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Navigation */}
-        <nav className="flex items-center gap-4 text-sm font-medium">
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-4 text-sm font-medium">
           {navItems.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
@@ -37,7 +53,7 @@ const Navbar = () => {
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all",
                 pathname === href
                   ? "bg-primary/10 text-primary"
-                  : "hover:bg-muted hover:text-primary text-foreground/80",
+                  : "hover:bg-muted hover:text-primary text-foreground/80"
               )}
             >
               <Icon size={16} />
@@ -45,6 +61,42 @@ const Navbar = () => {
             </Link>
           ))}
         </nav>
+
+        {/* Mobile Nav Trigger */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MenuIcon className="w-5 h-5 mr-9" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2">
+                  <ZapIcon className="w-5 h-5 text-primary" />
+                  <span className="text-xl font-bold font-mono tracking-wide text-primary">Stridr</span>
+                </SheetTitle>
+              </SheetHeader>
+              <nav className="mt-6 flex flex-col gap-4">
+                {navItems.map(({ href, label, icon: Icon }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={clsx(
+                      "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all",
+                      pathname === href
+                        ? "bg-primary/10 text-primary"
+                        : "hover:bg-muted hover:text-primary text-foreground/80"
+                    )}
+                  >
+                    <Icon size={16} />
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

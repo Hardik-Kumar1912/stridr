@@ -29,13 +29,9 @@ export default function CreateRoutePage() {
   if (!mounted) return null;
 
   const getDistanceFromInput = () => {
-    if (inputType === "distance") {
-      return Number(distance);
-    } else if (inputType === "time") {
-      return Number(time) * 0.1; // 6 km/h = 0.1 km/min
-    } else if (inputType === "calories") {
-      return Number(calories) / 50; // 50 kcal per km
-    }
+    if (inputType === "distance") return Number(distance);
+    if (inputType === "time") return Number(time) * 0.1;
+    if (inputType === "calories") return Number(calories) / 50;
     return 0;
   };
 
@@ -44,7 +40,6 @@ export default function CreateRoutePage() {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-
           const { address } = await fetch(
             `/api/reverseGeocode?lat=${latitude}&lon=${longitude}`
           ).then((res) => res.json());
@@ -55,11 +50,7 @@ export default function CreateRoutePage() {
           console.error("Error getting location:", error);
           alert("Could not fetch location. Please allow location access.");
         },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0,
-        }
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
       );
     } else {
       alert("Geolocation is not supported by your browser.");
@@ -68,7 +59,6 @@ export default function CreateRoutePage() {
 
   const handleSubmit = async () => {
     setLoading(true);
-
     try {
       if (!("geolocation" in navigator)) {
         alert("Geolocation not supported by your browser.");
@@ -86,9 +76,7 @@ export default function CreateRoutePage() {
 
       const res = await fetch("/api/route", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_location_cords: [longitude, latitude],
           route_distance: Number(getDistanceFromInput()) * 1000,
@@ -96,19 +84,10 @@ export default function CreateRoutePage() {
       });
 
       const data = await res.json();
-
-      // console.log("Full API Response from frontend :", data);
-
-      if (!data?.route[0]) {
-        throw new Error("No route generated");
-      }
+      if (!data?.route[0]) throw new Error("No route generated");
 
       const route = data.route[0];
-
       setRoute(route);
-
-      // console.log("Saved route to context ( console from frontend ) :", route);
-
       router.push("/result");
     } catch (error) {
       console.error("Route generation failed:", error);
@@ -119,7 +98,7 @@ export default function CreateRoutePage() {
   };
 
   return (
-    <main className="mt-20 mb-5 max-w-7xl mx-auto py-12 px-6">
+    <main className="mt-20 mb-5 max-w-7xl mx-auto py-12 px-4 sm:px-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
         {/* Form Section */}
         <div className="h-full border border-muted rounded-xl shadow-md p-8 bg-white">
@@ -131,14 +110,19 @@ export default function CreateRoutePage() {
             {/* Starting Location */}
             <div className="space-y-2">
               <Label htmlFor="start-location">Starting Location</Label>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Input
                   id="start-location"
                   placeholder="Enter starting point"
                   value={startLocation}
                   onChange={(e) => setStartLocation(e.target.value)}
+                  className="w-full"
                 />
-                <Button variant="outline" onClick={getCurrentLocation}>
+                <Button
+                  variant="outline"
+                  onClick={getCurrentLocation}
+                  className="whitespace-nowrap"
+                >
                   Use Current Location
                 </Button>
               </div>
@@ -150,7 +134,7 @@ export default function CreateRoutePage() {
               <RadioGroup
                 defaultValue="round"
                 onValueChange={(value) => setTripType(value)}
-                className="flex gap-6"
+                className="flex flex-col sm:flex-row gap-4"
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="round" id="round" />
@@ -163,7 +147,7 @@ export default function CreateRoutePage() {
               </RadioGroup>
             </div>
 
-            {/* Destination - only if not round trip */}
+            {/* Destination */}
             {tripType === "destination" && (
               <div className="space-y-2">
                 <Label htmlFor="destination">Destination</Label>
@@ -172,6 +156,7 @@ export default function CreateRoutePage() {
                   placeholder="Enter destination"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
+                  className="w-full"
                 />
               </div>
             )}
@@ -182,7 +167,7 @@ export default function CreateRoutePage() {
               <RadioGroup
                 defaultValue="distance"
                 onValueChange={(val) => setInputType(val)}
-                className="flex gap-4"
+                className="flex flex-col sm:flex-row gap-4"
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="distance" id="input-distance" />
@@ -199,7 +184,7 @@ export default function CreateRoutePage() {
               </RadioGroup>
             </div>
 
-            {/* Conditional Input */}
+            {/* Conditional Inputs */}
             {inputType === "distance" && (
               <div className="space-y-2">
                 <Label htmlFor="distance">Target Distance (in km)</Label>
@@ -209,6 +194,7 @@ export default function CreateRoutePage() {
                   placeholder="e.g. 5"
                   value={distance}
                   onChange={(e) => setDistance(e.target.value)}
+                  className="w-full"
                 />
               </div>
             )}
@@ -222,6 +208,7 @@ export default function CreateRoutePage() {
                   placeholder="e.g. 30"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
+                  className="w-full"
                 />
               </div>
             )}
@@ -235,6 +222,7 @@ export default function CreateRoutePage() {
                   placeholder="e.g. 200"
                   value={calories}
                   onChange={(e) => setCalories(e.target.value)}
+                  className="w-full"
                 />
               </div>
             )}
@@ -244,7 +232,6 @@ export default function CreateRoutePage() {
               kcal/km.
             </p>
 
-            {/* Submit Button */}
             <Button
               className="w-full mt-4"
               onClick={handleSubmit}
@@ -256,11 +243,11 @@ export default function CreateRoutePage() {
         </div>
 
         {/* Image Section */}
-        <div className="h-full flex items-center justify-center">
+        <div className="hidden sm:flex h-full items-center justify-center">
           <img
             src="/createRoute.png"
             alt="Create Route Illustration"
-            className="w-full h-auto rounded-xl shadow-md border border-border"
+            className="w-full h-auto rounded-xl shadow-md border border-border max-w-md sm:max-w-none"
           />
         </div>
       </div>

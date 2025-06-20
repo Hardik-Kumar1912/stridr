@@ -21,9 +21,11 @@ export default function ProfilePage() {
   if (!hasMounted) return null;
 
   return (
-    <main className="max-w-2xl mx-auto py-12 px-6 mt-20 mb-10 space-y-8 bg-[#fdfcf7] rounded-xl shadow-md">
-      <h1 className="text-3xl font-bold text-[#1b5e20] mb-2">Your Profile</h1>
-      <p className="text-[#33691e]">
+    <main className="max-w-2xl mx-auto py-12 px-4 sm:px-6 mt-20 mb-10 space-y-8 bg-[#fdfcf7] rounded-xl shadow-md">
+      <h1 className="text-3xl font-bold text-[#1b5e20] mb-2 text-center sm:text-left">
+        Your Profile
+      </h1>
+      <p className="text-[#33691e] text-center sm:text-left">
         Fill in your details to help us create more personalized and convenient
         jogging routes.
       </p>
@@ -42,13 +44,13 @@ export default function ProfilePage() {
           )}
         </div>
 
-        <div>
+        <div className="w-full flex justify-center">
           <UploadButton
             endpoint="imageUploader"
             onClientUploadComplete={(res) => {
               console.log("Files: ", res);
               alert("Upload Completed");
-              setProfileImage(res?.[0]?.url); // update profile image
+              setProfileImage(res?.[0]?.url);
             }}
             onUploadError={(error) => {
               alert(`ERROR! ${error.message}`);
@@ -89,7 +91,7 @@ export default function ProfilePage() {
         <Input
           id="name"
           placeholder="Enter your full name"
-          className="bg-white border border-[#a5d6a7]"
+          className="bg-white border border-[#a5d6a7] w-full"
         />
       </div>
 
@@ -102,7 +104,7 @@ export default function ProfilePage() {
           id="age"
           type="number"
           placeholder="Enter your age"
-          className="bg-white border border-[#a5d6a7]"
+          className="bg-white border border-[#a5d6a7] w-full"
         />
       </div>
 
@@ -112,7 +114,7 @@ export default function ProfilePage() {
         <RadioGroup
           defaultValue="male"
           onValueChange={(value) => setGender(value)}
-          className="flex gap-6"
+          className="flex flex-col sm:flex-row gap-4"
         >
           {["male", "female", "other"].map((option) => (
             <div key={option} className="flex items-center space-x-2">
@@ -133,7 +135,7 @@ export default function ProfilePage() {
         <Textarea
           id="address"
           placeholder="Enter your address"
-          className="bg-white border border-[#a5d6a7]"
+          className="bg-white border border-[#a5d6a7] w-full"
         />
       </div>
 

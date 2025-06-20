@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="flex flex-col gap-8 md:flex-row md:justify-between md:items-start">
           {/* Logo + Copyright */}
           <div className="flex flex-col items-center md:items-start gap-2">
             <Link href="/" className="flex items-center gap-2">
@@ -27,7 +27,7 @@ const Footer = () => {
           </div>
 
           {/* Navigation Links */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-2 text-sm text-center md:text-left">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-2 text-sm text-center md:text-left justify-center">
             <Link
               href="/about"
               className="text-muted-foreground hover:text-primary transition-colors"
@@ -67,9 +67,11 @@ const Footer = () => {
           </div>
 
           {/* System Status */}
-          <div className="flex items-center gap-2 px-3 py-2 border border-border rounded-md bg-background/50">
-            <div className="w-2 h-2 rounded-full bg-green-500" />
-            <span className="text-xs font-mono">LIVE & TRACKING</span>
+          <div className="flex justify-center md:justify-end">
+            <div className="flex items-center gap-2 px-3 py-2 border border-border rounded-md bg-background/50">
+              <div className="w-2 h-2 rounded-full bg-green-500" />
+              <span className="text-xs font-mono">LIVE & TRACKING</span>
+            </div>
           </div>
         </div>
       </div>
