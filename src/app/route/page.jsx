@@ -100,7 +100,7 @@ export default function CreateRoutePage() {
   return (
     <main className="mt-20 mb-5 max-w-7xl mx-auto py-12 px-4 sm:px-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-        {/* Form Section */}
+        {/* Form Section  */}
         <div className="h-full border border-muted rounded-xl shadow-md p-8 bg-white">
           <h1 className="text-3xl font-bold text-primary mb-8">
             Create Your Route
