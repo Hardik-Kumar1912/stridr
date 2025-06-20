@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  HomeIcon,
-  MapPinIcon,
-  UserCircleIcon,
-  ZapIcon,
-} from "lucide-react";
+import { HomeIcon, MapPinIcon, UserCircleIcon, ZapIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -42,7 +37,7 @@ const Navbar = () => {
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all",
                 pathname === href
                   ? "bg-primary/10 text-primary"
-                  : "hover:bg-muted hover:text-primary text-foreground/80"
+                  : "hover:bg-muted hover:text-primary text-foreground/80",
               )}
             >
               <Icon size={16} />

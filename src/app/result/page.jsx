@@ -33,12 +33,18 @@ export default function ResultPage() {
           <p className="text-2xl font-bold text-blue-600">{distanceInKm} km</p>
         </div>
         <div className="bg-white p-4 rounded-xl shadow-sm border">
-          <h3 className="text-lg font-semibold text-gray-700">Estimated Time</h3>
+          <h3 className="text-lg font-semibold text-gray-700">
+            Estimated Time
+          </h3>
           <p className="text-2xl font-bold text-green-600">{timeInMin} min</p>
         </div>
         <div className="bg-white p-4 rounded-xl shadow-sm border">
-          <h3 className="text-lg font-semibold text-gray-700">Calories Burned</h3>
-          <p className="text-2xl font-bold text-orange-600">{estimatedCalories} kcal</p>
+          <h3 className="text-lg font-semibold text-gray-700">
+            Calories Burned
+          </h3>
+          <p className="text-2xl font-bold text-orange-600">
+            {estimatedCalories} kcal
+          </p>
         </div>
         <div className="bg-white p-4 rounded-xl shadow-sm border">
           <h3 className="text-lg font-semibold text-gray-700">Turns</h3>

@@ -20,7 +20,8 @@ export default function Home() {
     },
     {
       title: "Sunset Riverside Run",
-      description: "5km flat route along the river, great for stamina building.",
+      description:
+        "5km flat route along the river, great for stamina building.",
       image: "/river.png",
     },
     {
@@ -30,12 +31,14 @@ export default function Home() {
     },
     {
       title: "Green Trail Sprint",
-      description: "Fast-paced track with 2.5km lap distance, minimal foot traffic.",
+      description:
+        "Fast-paced track with 2.5km lap distance, minimal foot traffic.",
       image: "/green.png",
     },
     {
       title: "City Lights Walk",
-      description: "Night-friendly route with street lighting and easy terrain.",
+      description:
+        "Night-friendly route with street lighting and easy terrain.",
       image: "/street.png",
     },
   ];
@@ -64,8 +67,9 @@ export default function Home() {
               Meet <span className="text-primary">Strider</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto md:mx-0">
-              Discover personalized jogging and walking routes powered by real-time AI insights.
-              Whether it’s water stalls, greenery, or your stamina goals — we’ve got you covered.
+              Discover personalized jogging and walking routes powered by
+              real-time AI insights. Whether it’s water stalls, greenery, or
+              your stamina goals — we’ve got you covered.
             </p>
             <Button
               asChild
@@ -84,7 +88,9 @@ export default function Home() {
       {/* CAROUSEL SECTION */}
       <section className="pt-10 pb-20 px-6 bg-background">
         <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary">Popular Routes</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary">
+            Popular Routes
+          </h2>
           <p className="text-muted-foreground mt-2 text-sm md:text-base">
             Handpicked routes based on safety, scenery, and stamina level
           </p>
@@ -105,8 +111,12 @@ export default function Home() {
                       className="w-full h-48 object-cover"
                     />
                     <div className="p-6 space-y-2">
-                      <h3 className="text-xl font-semibold text-primary">{route.title}</h3>
-                      <p className="text-sm text-muted-foreground">{route.description}</p>
+                      <h3 className="text-xl font-semibold text-primary">
+                        {route.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {route.description}
+                      </p>
                     </div>
                   </div>
                 </CarouselItem>

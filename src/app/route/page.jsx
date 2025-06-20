@@ -46,7 +46,7 @@ export default function CreateRoutePage() {
           const { latitude, longitude } = position.coords;
 
           const response = await fetch(
-            `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=c249ecec82534481863e8bb74c5bc463`
+            `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=c249ecec82534481863e8bb74c5bc463`,
           );
           const data = await response.json();
           const address = data.results[0]?.formatted;
@@ -61,7 +61,7 @@ export default function CreateRoutePage() {
           enableHighAccuracy: true,
           timeout: 10000,
           maximumAge: 0,
-        }
+        },
       );
     } else {
       alert("Geolocation is not supported by your browser.");

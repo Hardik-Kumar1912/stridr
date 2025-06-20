@@ -2,7 +2,7 @@ export async function getRoute(
   user_location_cords, // [lon, lat]
   route_distance,
   poiCount,
-  featureCollection
+  featureCollection,
 ) {
   const GRAPHHOPPER_HOST_URL =
     process.env.GRAPHHOPPER_HOST_URL || "http://localhost:8989";
@@ -20,7 +20,7 @@ export async function getRoute(
           if: `in_secondary_poi_${i}`,
           multiply_by: "1.5",
         }
-      )
+      ),
     ),
     areas: featureCollection,
     distance_influence: 100,
@@ -37,7 +37,7 @@ export async function getRoute(
 
   console.log(
     "Fetching round-trip route with payload:",
-    JSON.stringify(payload)
+    JSON.stringify(payload),
   );
 
   try {

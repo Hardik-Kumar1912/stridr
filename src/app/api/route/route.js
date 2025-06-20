@@ -12,7 +12,7 @@ export async function POST(req) {
     user_location_cords,
     route_distance,
     pois.length,
-    featureCollection
+    featureCollection,
   );
 
   return Response.json({ route });
