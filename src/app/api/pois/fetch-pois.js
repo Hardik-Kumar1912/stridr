@@ -47,6 +47,12 @@ export async function fetchPOIs([lon, lat], radius) {
     node["amenity"="artwork"](around:${radius},${lat},${lon});
     node["historic"="memorial"](around:${radius},${lat},${lon});
     node["tourism"="gallery"](around:${radius},${lat},${lon});
+
+    // Emergency-compatible medical POIs
+    node["amenity"="hospital"](around:${radius},${lat},${lon});
+    node["amenity"="clinic"](around:${radius},${lat},${lon});
+    node["amenity"="first_aid"](around:${radius},${lat},${lon});
+    node["emergency"="yes"](around:${radius},${lat},${lon});
   );
   out center;
 `;
