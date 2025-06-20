@@ -35,10 +35,10 @@ export async function getRoute(
     custom_model: customModel,
   };
 
-  console.log(
-    "Fetching round-trip route with payload:",
-    JSON.stringify(payload),
-  );
+  // console.log(
+  //   "Fetching round-trip route with payload:",
+  //   JSON.stringify(payload),
+  // );
 
   try {
     const res = await fetch(url, {
@@ -48,7 +48,7 @@ export async function getRoute(
     });
 
     const data = await res.json();
-    console.log("Round-trip data:", data.paths);
+    // console.log("Round-trip data:", data.paths);
     return data.paths;
   } catch (e) {
     console.error("Error fetching round-trip:", e);

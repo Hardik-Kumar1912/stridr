@@ -97,7 +97,7 @@ export default function CreateRoutePage() {
 
       const data = await res.json();
 
-      console.log("Full API Response from frontend :", data);
+      // console.log("Full API Response from frontend :", data);
 
       if (!data?.route[0]) {
         throw new Error("No route generated");
@@ -107,7 +107,7 @@ export default function CreateRoutePage() {
 
       setRoute(route);
 
-      console.log("Saved route to context ( console from frontend ) :", route);
+      // console.log("Saved route to context ( console from frontend ) :", route);
 
       router.push("/result");
     } catch (error) {

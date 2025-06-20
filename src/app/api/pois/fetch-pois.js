@@ -1,5 +1,5 @@
 export async function fetchPOIs([lon, lat], radius) {
-  console.log(`Fetching POIs around ${lat}, ${lon} with radius ${radius}`);
+  // console.log(`Fetching POIs around ${lat}, ${lon} with radius ${radius}`);
   const overpassUrl = `https://overpass-api.de/api/interpreter`;
   const query = `
   [out:json][timeout:25];
@@ -64,10 +64,10 @@ export async function fetchPOIs([lon, lat], radius) {
   });
 
   const data = await res.json();
-  console.log(`Fetched ${data.elements.length} POIs`);
-  console.log("----- POI Data -----");
-  console.log(data);
-  console.log("-------POI DATA END-------");
+  // console.log(`Fetched ${data.elements.length} POIs`);
+  // console.log("----- POI Data -----");
+  // console.log(data);
+  // console.log("-------POI DATA END-------");
   return data.elements
     .map((el) => {
       if (el.lat != null && el.lon != null) {
