@@ -8,7 +8,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
 import { useRoute } from "@/context/RouteContext";
 
-
 export default function CreateRoutePage() {
   const router = useRouter();
 
@@ -16,17 +15,29 @@ export default function CreateRoutePage() {
   const [mounted, setMounted] = useState(false);
   const [startLocation, setStartLocation] = useState("");
   const [destination, setDestination] = useState("");
+  const [inputType, setInputType] = useState("distance");
   const [distance, setDistance] = useState("");
   const [time, setTime] = useState("");
+  const [calories, setCalories] = useState("");
   const [loading, setLoading] = useState(false);
-  const { setPolyline } = useRoute();
-
+  const { setRoute } = useRoute();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) return null;
+
+  const getDistanceFromInput = () => {
+    if (inputType === "distance") {
+      return Number(distance);
+    } else if (inputType === "time") {
+      return Number(time) * 0.1; // 6 km/h = 0.1 km/min
+    } else if (inputType === "calories") {
+      return Number(calories) / 50; // 50 kcal per km
+    }
+    return 0;
+  };
 
   const getCurrentLocation = async () => {
     if ("geolocation" in navigator) {
@@ -82,7 +93,7 @@ export default function CreateRoutePage() {
         },
         body: JSON.stringify({
           user_location_cords: [longitude, latitude],
-          route_distance: Number(distance)*1000,
+          route_distance: Number(getDistanceFromInput()) * 1000,
         }),
       });
 
@@ -90,15 +101,15 @@ export default function CreateRoutePage() {
 
       console.log("Full API Response from frontend :", data);
 
-      if (!data?.route[0].points) {
+      if (!data?.route[0]) {
         throw new Error("No route generated");
       }
 
-      const polyline = data.route[0].points;
+      const route = data.route[0];
 
-      setPolyline(polyline);
+      setRoute(route);
 
-      console.log("Saved polyline to context ( console from frontend ) :", polyline);
+      console.log("Saved route to context ( console from frontend ) :", route);
 
       router.push("/result");
     } catch (error) {
@@ -167,29 +178,73 @@ export default function CreateRoutePage() {
               </div>
             )}
 
-            {/* Distance */}
+            {/* Input Type Selector */}
             <div className="space-y-2">
-              <Label htmlFor="distance">Target Distance (in km)</Label>
-              <Input
-                id="distance"
-                type="number"
-                placeholder="e.g. 5"
-                value={distance}
-                onChange={(e) => setDistance(e.target.value)}
-              />
+              <Label>Goal Type</Label>
+              <RadioGroup
+                defaultValue="distance"
+                onValueChange={(val) => setInputType(val)}
+                className="flex gap-4"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="distance" id="input-distance" />
+                  <Label htmlFor="input-distance">Distance (km)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="time" id="input-time" />
+                  <Label htmlFor="input-time">Time (min)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="calories" id="input-calories" />
+                  <Label htmlFor="input-calories">Calories (kcal)</Label>
+                </div>
+              </RadioGroup>
             </div>
 
-            {/* Time */}
-            <div className="space-y-2">
-              <Label htmlFor="time">Expected Time (in minutes)</Label>
-              <Input
-                id="time"
-                type="number"
-                placeholder="e.g. 30"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-              />
-            </div>
+            {/* Conditional Input */}
+            {inputType === "distance" && (
+              <div className="space-y-2">
+                <Label htmlFor="distance">Target Distance (in km)</Label>
+                <Input
+                  id="distance"
+                  type="number"
+                  placeholder="e.g. 5"
+                  value={distance}
+                  onChange={(e) => setDistance(e.target.value)}
+                />
+              </div>
+            )}
+
+            {inputType === "time" && (
+              <div className="space-y-2">
+                <Label htmlFor="time">Expected Time (in minutes)</Label>
+                <Input
+                  id="time"
+                  type="number"
+                  placeholder="e.g. 30"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                />
+              </div>
+            )}
+
+            {inputType === "calories" && (
+              <div className="space-y-2">
+                <Label htmlFor="calories">Calories to Burn (in kcal)</Label>
+                <Input
+                  id="calories"
+                  type="number"
+                  placeholder="e.g. 200"
+                  value={calories}
+                  onChange={(e) => setCalories(e.target.value)}
+                />
+              </div>
+            )}
+
+            <p className="text-sm text-muted-foreground">
+              * Estimates based on average walking speed (6 km/h) and 50
+              kcal/km.
+            </p>
 
             {/* Submit Button */}
             <Button

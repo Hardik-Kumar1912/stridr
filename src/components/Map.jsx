@@ -12,11 +12,12 @@ import mapboxPolyline from "@mapbox/polyline";
 import { useEffect, useState } from "react";
 import { useRoute } from "@/context/RouteContext";
 import L from "leaflet";
-import "@fortawesome/fontawesome-free/css/all.min.css"; // FontAwesome for vector icon
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const RouteMap = () => {
-  const { polyline } = useRoute();
+  const { route } = useRoute();
   const [decodedPath, setDecodedPath] = useState([]);
+  const polyline = route.points;
 
   useEffect(() => {
     if (typeof polyline === "string" && polyline.length > 0) {

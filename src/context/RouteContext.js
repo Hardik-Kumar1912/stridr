@@ -5,10 +5,10 @@ import { createContext, useContext, useState } from "react";
 const RouteContext = createContext();
 
 export function RouteProvider({ children }) {
-  const [polyline, setPolyline] = useState("");
+  const [route, setRoute] = useState("");
 
   return (
-    <RouteContext.Provider value={{ polyline, setPolyline }}>
+    <RouteContext.Provider value={{ route, setRoute }}>
       {children}
     </RouteContext.Provider>
   );
