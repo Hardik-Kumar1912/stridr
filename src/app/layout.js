@@ -32,6 +32,7 @@ export default function RootLayout({ children }) {
             integrity="sha256-o9N1j7kUNZdsC9AqKyPzCkFl6RykWBA9+0m0m0XQPUk="
             crossOrigin=""
           />
+          <link rel="icon" type="image/png" href="/favicon.png" />
         </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
