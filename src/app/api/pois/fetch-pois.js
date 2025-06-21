@@ -4,54 +4,36 @@ export async function fetchPOIs([lon, lat], radius) {
   const query = `
   [out:json][timeout:25];
   (
-    // Parks, playgrounds, sport tracks
-    node["leisure"="park"](around:${radius},${lat},${lon});
-    way["leisure"="park"](around:${radius},${lat},${lon});
-    relation["leisure"="park"](around:${radius},${lat},${lon});
-    node["leisure"="playground"](around:${radius},${lat},${lon});
-    way["leisure"="playground"](around:${radius},${lat},${lon});
-    node["leisure"="pitch"](around:${radius},${lat},${lon});
-    way["leisure"="pitch"](around:${radius},${lat},${lon});
-    node["leisure"="track"](around:${radius},${lat},${lon});
-    way["leisure"="track"](around:${radius},${lat},${lon});
+    // Parks, playgrounds, sport & fitness areas
+    node["leisure"~"^(park|playground|pitch|track|fitness_station|nature_reserve)$"](around:${radius},${lat},${lon});
+    way["leisure"~"^(park|playground|pitch|track|fitness_station|nature_reserve)$"](around:${radius},${lat},${lon});
+    relation["leisure"~"^(park|playground|pitch|track|fitness_station|nature_reserve)$"](around:${radius},${lat},${lon});
 
-    // Nature reserves / forests
-    way["leisure"="nature_reserve"](around:${radius},${lat},${lon});
-    relation["leisure"="nature_reserve"](around:${radius},${lat},${lon});
+    // Forests and natural wooded areas
     way["landuse"="forest"](around:${radius},${lat},${lon});
     relation["landuse"="forest"](around:${radius},${lat},${lon});
     way["natural"="wood"](around:${radius},${lat},${lon});
     relation["natural"="wood"](around:${radius},${lat},${lon});
 
-    // Rivers & lakes
-    way["waterway"="river"](around:${radius},${lat},${lon});
-    way["waterway"="riverbank"](around:${radius},${lat},${lon});
-    way["natural"="water"]["water"="lake"](around:${radius},${lat},${lon});
+    // Water bodies
+    way["natural"="water"](around:${radius},${lat},${lon});
+    relation["natural"="water"](around:${radius},${lat},${lon});
+    way["waterway"~"^(river|riverbank)$"](around:${radius},${lat},${lon});
 
-    // Tourist spots & viewpoints
-    node["tourism"="attraction"](around:${radius},${lat},${lon});
-    way["tourism"="attraction"](around:${radius},${lat},${lon});
-    node["tourism"="viewpoint"](around:${radius},${lat},${lon});
-    way["tourism"="viewpoint"](around:${radius},${lat},${lon});
+    // Walkable paths & footways
+    way["highway"~"^(footway|path|cycleway)$"](around:${radius},${lat},${lon});
 
-    // Amenities for runners
-    node["amenity"="bench"](around:${radius},${lat},${lon});
-    node["amenity"="cafe"](around:${radius},${lat},${lon});
-    way["amenity"="cafe"](around:${radius},${lat},${lon});
-    node["amenity"="fountain"](around:${radius},${lat},${lon});
-    node["amenity"="drinking_water"](around:${radius},${lat},${lon});
-    node["amenity"="water_point"](around:${radius},${lat},${lon});
-    node["amenity"="fountain"]["drinking_water"="yes"](around:${radius},${lat},${lon});
-
-    // Peaceful, scenic, historical
-    node["amenity"="artwork"](around:${radius},${lat},${lon});
+    // Scenic and cultural POIs
+    node["tourism"~"^(attraction|viewpoint|gallery)$"](around:${radius},${lat},${lon});
     node["historic"="memorial"](around:${radius},${lat},${lon});
-    node["tourism"="gallery"](around:${radius},${lat},${lon});
+    node["amenity"="artwork"](around:${radius},${lat},${lon});
 
-    // Emergency-compatible medical POIs
-    node["amenity"="hospital"](around:${radius},${lat},${lon});
-    node["amenity"="clinic"](around:${radius},${lat},${lon});
-    node["amenity"="first_aid"](around:${radius},${lat},${lon});
+    // Rest & refreshment
+    node["amenity"~"^(bench|cafe|fountain|drinking_water|water_point|shelter|toilets)$"](around:${radius},${lat},${lon});
+    way["amenity"="cafe"](around:${radius},${lat},${lon});  // In case of mapped café buildings
+
+    // Emergency and medical
+    node["amenity"~"^(hospital|clinic|first_aid)$"](around:${radius},${lat},${lon});
     node["emergency"="yes"](around:${radius},${lat},${lon});
   );
   out center;
