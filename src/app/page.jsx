@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRightIcon, MapIcon, HeartIcon, FlameIcon } from "lucide-react";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,6 +44,8 @@ export default function Home() {
     },
   ];
 
+  const { user } = useUser();
+
   return (
     <>
       <main className="relative pt-20 flex items-center justify-center px-6 bg-background text-foreground overflow-hidden">
@@ -71,16 +74,27 @@ export default function Home() {
               real-time AI insights. Whether it’s water stalls, greenery, or
               your stamina goals — we’ve got you covered.
             </p>
-            <Button
-              asChild
-              size="lg"
-              className="px-8 py-6 text-base md:text-lg font-mono"
-            >
-              <Link href="/route">
-                Create Route
-                <ArrowRightIcon className="ml-2 size-5" />
-              </Link>
-            </Button>
+            {user ? (
+              <Button
+                size="lg"
+                className="px-8 py-6 text-base md:text-lg font-mono"
+              >
+                <Link href="/route">
+                  Create Route
+                </Link>
+                  <ArrowRightIcon className="ml-2 size-5" />
+              </Button>
+            ) : (
+              <SignInButton mode="modal">
+                <Button
+                  size="lg"
+                  className="px-8 py-6 text-base md:text-lg font-mono"
+                >
+                  Create Route
+                  <ArrowRightIcon className="ml-2 size-5" />
+                </Button>
+              </SignInButton>
+            )}
           </div>
         </div>
       </main>
