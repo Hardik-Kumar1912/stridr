@@ -79,10 +79,8 @@ export default function Home() {
                 size="lg"
                 className="px-8 py-6 text-base md:text-lg font-mono"
               >
-                <Link href="/route">
-                  Create Route
-                </Link>
-                  <ArrowRightIcon className="ml-2 size-5" />
+                <Link href="/route">Create Route</Link>
+                <ArrowRightIcon className="ml-2 size-5" />
               </Button>
             ) : (
               <SignInButton mode="modal">

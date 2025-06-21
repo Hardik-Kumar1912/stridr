@@ -2,8 +2,10 @@
 import { fetchPOIs } from "../pois/fetch-pois";
 import { getFeatureCollection } from "./featureCollection";
 import { getRoute } from "./getRoute.js";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req) {
+  await auth.protect();
   console.log("Received request to modify route");
   const { user_location_cords, route_distance } = await req.json();
   const pois = await fetchPOIs(user_location_cords, route_distance / 2);
@@ -12,7 +14,7 @@ export async function POST(req) {
     user_location_cords,
     route_distance,
     pois.length,
-    featureCollection,
+    featureCollection
   );
 
   return Response.json({ route });

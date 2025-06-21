@@ -41,7 +41,7 @@ export default function CreateRoutePage() {
         async (position) => {
           const { latitude, longitude } = position.coords;
           const { address } = await fetch(
-            `/api/reverseGeocode?lat=${latitude}&lon=${longitude}`
+            `/api/reverseGeocode?lat=${latitude}&lon=${longitude}`,
           ).then((res) => res.json());
 
           if (address) setStartLocation(address);
@@ -50,7 +50,7 @@ export default function CreateRoutePage() {
           console.error("Error getting location:", error);
           alert("Could not fetch location. Please allow location access.");
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
       );
     } else {
       alert("Geolocation is not supported by your browser.");

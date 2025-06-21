@@ -67,7 +67,7 @@ const Navbar = () => {
                   "flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all",
                   pathname === href
                     ? "bg-primary/10 text-primary"
-                    : "hover:bg-muted hover:text-primary text-foreground/80"
+                    : "hover:bg-muted hover:text-primary text-foreground/80",
                 )}
               >
                 <Icon size={16} />
@@ -107,7 +107,7 @@ const Navbar = () => {
                           "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all",
                           pathname === href
                             ? "bg-primary/10 text-primary"
-                            : "hover:bg-muted hover:text-primary text-foreground/80"
+                            : "hover:bg-muted hover:text-primary text-foreground/80",
                         )}
                       >
                         <Icon size={16} />
@@ -137,7 +137,7 @@ const Navbar = () => {
         {/* =================== SIGNED OUT =================== */}
         <SignedOut>
           <nav className="flex items-center gap-4 text-base font-medium">
-            <SignInButton mode="modal" >
+            <SignInButton mode="modal">
               <Button
                 variant="ghost"
                 className="text-base font-medium px-3 py-1.5"
@@ -145,7 +145,7 @@ const Navbar = () => {
                 Login
               </Button>
             </SignInButton>
-            <SignUpButton mode="modal" >
+            <SignUpButton mode="modal">
               <Button
                 variant="ghost"
                 className="text-base font-medium px-3 py-1.5"
