@@ -8,17 +8,32 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { UserIcon } from "lucide-react";
 import { UploadButton } from "@/utils/uploadthing";
+import { useUser } from "@clerk/nextjs";
 
 export default function ProfilePage() {
+  const { user, isLoaded } = useUser();
   const [gender, setGender] = useState("male");
   const [profileImage, setProfileImage] = useState(null);
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [address, setAddress] = useState("");
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  if (!hasMounted) return null;
+  useEffect(() => {
+    if (user && isLoaded) {
+      setName(user.fullName || "");
+      setProfileImage(user.imageUrl || null);
+      setGender(user.gender || "male");
+      setAge(user.publicMetadata?.age || "");
+      setAddress(user.publicMetadata?.address || "");
+    }
+  }, [user, isLoaded]);
+
+  if (!hasMounted || !isLoaded) return null;
 
   return (
     <main className="max-w-2xl mx-auto py-12 px-4 sm:px-6 mt-20 mb-10 space-y-8 bg-[#fdfcf7] rounded-xl shadow-md">
@@ -74,9 +89,7 @@ export default function ProfilePage() {
             }}
             content={{
               button({ isUploading }) {
-                if (isUploading) return "Uploading...";
-                if (profileImage) return "Change Profile Picture";
-                return "Upload Profile Picture";
+                return isUploading ? "Uploading..." : "Upload Profile Image";
               },
             }}
           />
@@ -86,12 +99,14 @@ export default function ProfilePage() {
       {/* Name */}
       <div className="space-y-2">
         <Label htmlFor="name" className="text-[#2e7d32]">
-          Full Name
+          Name
         </Label>
         <Input
           id="name"
           placeholder="Enter your full name"
           className="bg-white border border-[#a5d6a7] w-full"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
 
@@ -105,6 +120,8 @@ export default function ProfilePage() {
           type="number"
           placeholder="Enter your age"
           className="bg-white border border-[#a5d6a7] w-full"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
         />
       </div>
 
@@ -112,18 +129,28 @@ export default function ProfilePage() {
       <div className="space-y-2">
         <Label className="text-[#2e7d32]">Gender</Label>
         <RadioGroup
-          defaultValue="male"
+          value={gender}
           onValueChange={(value) => setGender(value)}
           className="flex flex-col sm:flex-row gap-4"
         >
-          {["male", "female", "other"].map((option) => (
-            <div key={option} className="flex items-center space-x-2">
-              <RadioGroupItem value={option} id={option} />
-              <Label htmlFor={option} className="capitalize text-[#33691e]">
-                {option}
-              </Label>
-            </div>
-          ))}
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="male" id="male" />
+            <Label htmlFor="male" className="capitalize text-[#33691e]">
+              Male
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="female" id="female" />
+            <Label htmlFor="female" className="capitalize text-[#33691e]">
+              Female
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="other" id="other" />
+            <Label htmlFor="other" className="capitalize text-[#33691e]">
+              Other
+            </Label>
+          </div>
         </RadioGroup>
       </div>
 
@@ -136,6 +163,8 @@ export default function ProfilePage() {
           id="address"
           placeholder="Enter your address"
           className="bg-white border border-[#a5d6a7] w-full"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
         />
       </div>
 
