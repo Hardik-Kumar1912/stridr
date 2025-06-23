@@ -73,8 +73,19 @@ export default function CreateRoutePage() {
       });
 
       const { latitude, longitude } = coords.coords;
+      if(!startLocation) {
+        alert("Please enter a starting location or use your current location.");
+        setLoading(false);
+        return;
+      }
+      if (tripType === "destination" && !destination) {
+        alert("Please enter a destination.");
+        setLoading(false);
+        return;
+      }
 
-      const res = await fetch("/api/route", {
+      if(tripType === "round" ) {
+      const res = await fetch("/api/round-route", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -89,6 +100,24 @@ export default function CreateRoutePage() {
       const route = data.route[0];
       setRoute(route);
       router.push("/result");
+    } else if (tripType === "destination") {
+      const res = await fetch("/api/dest-route", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_location_cords: [longitude, latitude],
+          dest_location_cords: destination.split(", ").map(Number).reverse(),
+        }),
+      });
+
+        const data = await res.json();
+        console.log("Destination Route Data:", data.route);
+        if (!data?.route[0]) throw new Error("No route generated");
+
+        const route = data.route[0];
+        setRoute(route);
+        router.push("/result");
+      }
     } catch (error) {
       console.error("Route generation failed:", error);
       alert("Failed to generate route. Please try again.");
