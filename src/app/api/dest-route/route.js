@@ -1,6 +1,7 @@
 // src/app/api/route/route.js
 import { fetchDestPOIs } from "../pois/fech-dest-pois.js";
-import { getDestFeatureCollection } from "./DestFeatureCollection.js";
+import { getDestFeatureCollection } from "./destFeatureCollection.js";
+
 import { getDestRoute } from "./getDestRoute.js";
 import { auth } from "@clerk/nextjs/server";
 
