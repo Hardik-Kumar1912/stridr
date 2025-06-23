@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🏃‍♂️ Stridr
 
-## Getting Started
+Stridr is a smart web application that helps users discover optimal jogging and walking routes tailored to their preferences and goals. Whether you're looking to burn calories, stay close to green areas, or avoid the heat, Stridr has got you covered.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Round-trip Route Suggestions** – Get jogging paths that bring you back to your starting point.
+- **Smart Recommendations** – Routes based on temperature, greenery, nearby cafes/water stalls, and infrastructure.
+- **Personalization Engine** – Input your available time, preferred distance, and calorie goals.
+- **Live Map Integration** – Visual route previews powered by interactive maps.
+- **Route Analytics** – Get insights like estimated calories burned, distance, and average speed.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+| Layer        | Technology              |
+| ------------ | ------------------------|
+| Frontend     | Next.js, Tailwind CSS   |
+| Backend      | Node.js, Express        |
+| Database     | MongoDB                 |
+| Maps & Geo   | Leaflet.js / Mapbox     |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Homepage
 
-## Learn More
+> ![Homepage Screenshot](./screenshots/homepage.png) 
+> _A clean landing page to quickly get started._
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Create Route Page
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> _[Insert Screenshot Here]_  
+> _Users input their jogging preferences here._
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Route Page
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> _[Insert Screenshot Here]_  
+> _Shows the recommended route, distance, and other useful info._
+
+---
