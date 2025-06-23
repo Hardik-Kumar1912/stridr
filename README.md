@@ -16,7 +16,7 @@ Stridr is a smart web application that helps users discover optimal jogging and 
 | ------------ | ------------------------|
 | Frontend & Backend     | Next.js, Tailwind CSS   |
 | Database     | MongoDB                 |
-| Maps & Geo   | OpenStreetMap open API     |
+| Maps & Geo   | OpenStreetMap API  |
 |Core Backend|Graphhopper Docker Image|
 
 ### Homepage
