@@ -27,24 +27,6 @@ export async function getDestFeatureCollection(pois) {
         ],
       },
     });
-    // Secondary POI: +-0.0007
-    features.push({
-      type: "Feature",
-      id: `secondary_poi_${index}`,
-      geometry: {
-        type: "Polygon",
-        coordinates: [
-          [
-            [poi[0] - 0.0007, poi[1] - 0.0007],
-            [poi[0] + 0.0007, poi[1] - 0.0007],
-            [poi[0] + 0.0007, poi[1] + 0.0007],
-            [poi[0] - 0.0007, poi[1] + 0.0007],
-            [poi[0] - 0.0007, poi[1] - 0.0007],
-          ],
-        ],
-      },
-    });
-  });
   const featureCollection = {
     type: "FeatureCollection",
     features: features,

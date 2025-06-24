@@ -14,11 +14,7 @@ export async function getDestRoute(
       (_, i) => (
         {
           if: `in_primary_poi_${i}`,
-          multiply_by: "2",
-        },
-        {
-          if: `in_secondary_poi_${i}`,
-          multiply_by: "1.5",
+          multiply_by: "5",
         }
       ),
     ),
