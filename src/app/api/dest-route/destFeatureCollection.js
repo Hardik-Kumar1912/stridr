@@ -27,6 +27,8 @@ export async function getDestFeatureCollection(pois) {
         ],
       },
     });
+  });
+
   const featureCollection = {
     type: "FeatureCollection",
     features: features,

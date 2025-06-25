@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { RouteProvider } from "@/context/RouteContext";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({ children }) {
           <RouteProvider>
             <Navbar />
             {children}
+            <Toaster richColors position="top-center" />
             <Footer />
           </RouteProvider>
           <SpeedInsights />

@@ -11,9 +11,13 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
+
+import { toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
+import { useEffect } from "react";
 
 import {
   SignInButton,
@@ -42,6 +46,30 @@ const Navbar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+  const { isSignedIn, user } = useUser();
+  const prevSignedIn = useRef(null);
+
+  useEffect(() => {
+    if (prevSignedIn.current === null) {
+      // First mount: just store current state, do nothing
+      prevSignedIn.current = isSignedIn;
+      return;
+    }
+
+    // User just signed in
+    if (!prevSignedIn.current && isSignedIn) {
+      toast.success(`Welcome, ${user?.firstName || "User"}!`);
+    }
+
+    // User just signed out
+    if (prevSignedIn.current && !isSignedIn) {
+      toast("You have been logged out.");
+    }
+
+    // Update previous state
+    prevSignedIn.current = isSignedIn;
+  }, [isSignedIn]);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-md border-b border-border py-3">
       <div className="container mx-auto flex flex-row items-center justify-between px-4 gap-2 flex-wrap">
@@ -67,7 +95,7 @@ const Navbar = () => {
                   "flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all",
                   pathname === href
                     ? "bg-primary/10 text-primary"
-                    : "hover:bg-muted hover:text-primary text-foreground/80",
+                    : "hover:bg-muted hover:text-primary text-foreground/80"
                 )}
               >
                 <Icon size={16} />
@@ -107,7 +135,7 @@ const Navbar = () => {
                           "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all",
                           pathname === href
                             ? "bg-primary/10 text-primary"
-                            : "hover:bg-muted hover:text-primary text-foreground/80",
+                            : "hover:bg-muted hover:text-primary text-foreground/80"
                         )}
                       >
                         <Icon size={16} />

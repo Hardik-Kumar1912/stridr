@@ -41,7 +41,7 @@ export default function CreateRoutePage() {
         async (position) => {
           const { latitude, longitude } = position.coords;
           const { address } = await fetch(
-            `/api/reverseGeocode?lat=${latitude}&lon=${longitude}`,
+            `/api/reverseGeocode?lat=${latitude}&lon=${longitude}`
           ).then((res) => res.json());
 
           if (address) setStartLocation(address);
@@ -50,7 +50,7 @@ export default function CreateRoutePage() {
           console.error("Error getting location:", error);
           alert("Could not fetch location. Please allow location access.");
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
       );
     } else {
       alert("Geolocation is not supported by your browser.");
@@ -73,7 +73,7 @@ export default function CreateRoutePage() {
       });
 
       const { latitude, longitude } = coords.coords;
-      if(!startLocation) {
+      if (!startLocation) {
         alert("Please enter a starting location or use your current location.");
         setLoading(false);
         return;
@@ -84,31 +84,31 @@ export default function CreateRoutePage() {
         return;
       }
 
-      if(tripType === "round" ) {
-      const res = await fetch("/api/round-route", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_location_cords: [longitude, latitude],
-          route_distance: Number(getDistanceFromInput()) * 1000,
-        }),
-      });
+      if (tripType === "round") {
+        const res = await fetch("/api/round-route", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_location_cords: [longitude, latitude],
+            route_distance: Number(getDistanceFromInput()) * 1000,
+          }),
+        });
 
-      const data = await res.json();
-      if (!data?.route[0]) throw new Error("No route generated");
+        const data = await res.json();
+        if (!data?.route[0]) throw new Error("No route generated");
 
-      const route = data.route[0];
-      setRoute(route);
-      router.push("/result");
-    } else if (tripType === "destination") {
-      const res = await fetch("/api/dest-route", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_location_cords: [longitude, latitude],
-          dest_location_cords: destination.split(", ").map(Number).reverse(),
-        }),
-      });
+        const route = data.route[0];
+        setRoute(route);
+        router.push("/result");
+      } else if (tripType === "destination") {
+        const res = await fetch("/api/dest-route", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_location_cords: [longitude, latitude],
+            dest_location_cords: destination.split(", ").map(Number).reverse(),
+          }),
+        });
 
         const data = await res.json();
         console.log("Destination Route Data:", data.route);
@@ -190,70 +190,74 @@ export default function CreateRoutePage() {
               </div>
             )}
 
-            {/* Input Type Selector */}
-            <div className="space-y-2">
-              <Label>Goal Type</Label>
-              <RadioGroup
-                defaultValue="distance"
-                onValueChange={(val) => setInputType(val)}
-                className="flex flex-col sm:flex-row gap-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="distance" id="input-distance" />
-                  <Label htmlFor="input-distance">Distance (km)</Label>
+            {tripType === "round" && (
+              <>
+                {/* Input Type Selector */}
+                <div className="space-y-2">
+                  <Label>Goal Type</Label>
+                  <RadioGroup
+                    defaultValue="distance"
+                    onValueChange={(val) => setInputType(val)}
+                    className="flex flex-col sm:flex-row gap-4"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="distance" id="input-distance" />
+                      <Label htmlFor="input-distance">Distance (km)</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="time" id="input-time" />
+                      <Label htmlFor="input-time">Time (min)</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="calories" id="input-calories" />
+                      <Label htmlFor="input-calories">Calories (kcal)</Label>
+                    </div>
+                  </RadioGroup>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="time" id="input-time" />
-                  <Label htmlFor="input-time">Time (min)</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="calories" id="input-calories" />
-                  <Label htmlFor="input-calories">Calories (kcal)</Label>
-                </div>
-              </RadioGroup>
-            </div>
 
-            {/* Conditional Inputs */}
-            {inputType === "distance" && (
-              <div className="space-y-2">
-                <Label htmlFor="distance">Target Distance (in km)</Label>
-                <Input
-                  id="distance"
-                  type="number"
-                  placeholder="e.g. 5"
-                  value={distance}
-                  onChange={(e) => setDistance(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-            )}
+                {/* Conditional Inputs */}
+                {inputType === "distance" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="distance">Target Distance (in km)</Label>
+                    <Input
+                      id="distance"
+                      type="number"
+                      placeholder="e.g. 5"
+                      value={distance}
+                      onChange={(e) => setDistance(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                )}
 
-            {inputType === "time" && (
-              <div className="space-y-2">
-                <Label htmlFor="time">Expected Time (in minutes)</Label>
-                <Input
-                  id="time"
-                  type="number"
-                  placeholder="e.g. 30"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-            )}
+                {inputType === "time" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="time">Expected Time (in minutes)</Label>
+                    <Input
+                      id="time"
+                      type="number"
+                      placeholder="e.g. 30"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                )}
 
-            {inputType === "calories" && (
-              <div className="space-y-2">
-                <Label htmlFor="calories">Calories to Burn (in kcal)</Label>
-                <Input
-                  id="calories"
-                  type="number"
-                  placeholder="e.g. 200"
-                  value={calories}
-                  onChange={(e) => setCalories(e.target.value)}
-                  className="w-full"
-                />
-              </div>
+                {inputType === "calories" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="calories">Calories to Burn (in kcal)</Label>
+                    <Input
+                      id="calories"
+                      type="number"
+                      placeholder="e.g. 200"
+                      value={calories}
+                      onChange={(e) => setCalories(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                )}
+              </>
             )}
 
             <p className="text-sm text-muted-foreground">
