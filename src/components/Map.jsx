@@ -35,11 +35,20 @@ const RouteMap = () => {
   if (!decodedPath.length) return <p>Loading map...</p>;
 
   const start = decodedPath[0];
+  const end = decodedPath[decodedPath.length - 1];
 
-  // Custom vector start icon
+  const isRoundTrip = start[0] === end[0] && start[1] === end[1];
+
   const startIcon = new L.DivIcon({
     html: `<div style="font-size: 24px; color: green;"><i class="fas fa-map-marker-alt"></i></div>`,
     className: "custom-start-marker",
+    iconSize: [24, 24],
+    iconAnchor: [12, 24],
+  });
+
+  const endIcon = new L.DivIcon({
+    html: `<div style="font-size: 24px; color: red;"><i class="fas fa-map-marker-alt"></i></div>`,
+    className: "custom-end-marker",
     iconSize: [24, 24],
     iconAnchor: [12, 24],
   });
@@ -57,9 +66,17 @@ const RouteMap = () => {
       />
       <Polyline positions={decodedPath} color="blue" />
 
+      {/* Always show source marker */}
       <Marker position={start} icon={startIcon}>
-        <Popup>Start</Popup>
+        <Popup>{isRoundTrip ? "Start/End (Round Trip)" : "Start"}</Popup>
       </Marker>
+
+      {/* Show destination marker only if it's not a round trip */}
+      {!isRoundTrip && (
+        <Marker position={end} icon={endIcon}>
+          <Popup>Destination</Popup>
+        </Marker>
+      )}
     </MapContainer>
   );
 };

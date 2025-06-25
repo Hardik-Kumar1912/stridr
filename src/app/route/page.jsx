@@ -58,73 +58,85 @@ export default function CreateRoutePage() {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      if (!("geolocation" in navigator)) {
-        alert("Geolocation not supported by your browser.");
-        return;
-      }
+  setLoading(true);
+  try {
+    if (!("geolocation" in navigator)) {
+      alert("Geolocation not supported by your browser.");
+      return;
+    }
 
-      const coords = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-        });
+    const coords = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+      });
+    });
+
+    const { latitude, longitude } = coords.coords;
+
+    if (!startLocation) {
+      alert("Please enter a starting location or use your current location.");
+      setLoading(false);
+      return;
+    }
+
+    if (tripType === "destination" && !destination) {
+      alert("Please enter a destination.");
+      setLoading(false);
+      return;
+    }
+
+    if (tripType === "round") {
+      const res = await fetch("/api/round-route", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_location_cords: [longitude, latitude],
+          route_distance: Number(getDistanceFromInput()) * 1000,
+        }),
       });
 
-      const { latitude, longitude } = coords.coords;
-      if (!startLocation) {
-        alert("Please enter a starting location or use your current location.");
-        setLoading(false);
-        return;
+      const data = await res.json();
+      if (!data?.route[0]) throw new Error("No route generated");
+
+      const route = data.route[0];
+      setRoute(route);
+      router.push("/result");
+    } else if (tripType === "destination") {
+      const geoRes = await fetch(`/api/forwardGeocode?place=${encodeURIComponent(destination)}`);
+      const geoData = await geoRes.json();
+
+      if (!geoData?.coords) {
+        throw new Error("Could not geocode destination");
       }
-      if (tripType === "destination" && !destination) {
-        alert("Please enter a destination.");
-        setLoading(false);
-        return;
-      }
 
-      if (tripType === "round") {
-        const res = await fetch("/api/round-route", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            user_location_cords: [longitude, latitude],
-            route_distance: Number(getDistanceFromInput()) * 1000,
-          }),
-        });
+      const dest_location_cords = geoData.coords;
 
-        const data = await res.json();
-        if (!data?.route[0]) throw new Error("No route generated");
+      const res = await fetch("/api/dest-route", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_location_cords: [longitude, latitude],
+          dest_location_cords,
+        }),
+      });
 
-        const route = data.route[0];
-        setRoute(route);
-        router.push("/result");
-      } else if (tripType === "destination") {
-        const res = await fetch("/api/dest-route", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            user_location_cords: [longitude, latitude],
-            dest_location_cords: destination.split(", ").map(Number).reverse(),
-          }),
-        });
+      const data = await res.json();
+      console.log("Destination Route Data:", data.route);
+      if (!data?.route[0]) throw new Error("No route generated");
 
-        const data = await res.json();
-        console.log("Destination Route Data:", data.route);
-        if (!data?.route[0]) throw new Error("No route generated");
-
-        const route = data.route[0];
-        setRoute(route);
-        router.push("/result");
-      }
-    } catch (error) {
-      console.error("Route generation failed:", error);
-      alert("Failed to generate route. Please try again.");
-    } finally {
-      setLoading(false);
+      const route = data.route[0];
+      setRoute(route);
+      router.push("/result");
     }
-  };
+  } catch (error) {
+    console.error("Route generation failed:", error);
+    alert("Failed to generate route. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <main className="mt-20 mb-5 max-w-7xl mx-auto py-12 px-4 sm:px-6">
