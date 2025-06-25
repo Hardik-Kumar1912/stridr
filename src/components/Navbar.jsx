@@ -57,9 +57,11 @@ const Navbar = () => {
     }
 
     // User just signed in
-    if (!prevSignedIn.current && isSignedIn) {
-      toast.success(`Welcome, ${user?.firstName || "User"}!`);
-    }
+    // if (!prevSignedIn.current && isSignedIn) {
+    //   toast.success(`Welcome, ${user?.firstName || "User"}!`);
+    // } 
+    // Was showing on every reload, so commenting out
+    // added it to the SignInButton instead
 
     // User just signed out
     if (prevSignedIn.current && !isSignedIn) {

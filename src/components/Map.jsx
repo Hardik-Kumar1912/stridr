@@ -17,7 +17,10 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 const RouteMap = () => {
   const { route } = useRoute();
   const [decodedPath, setDecodedPath] = useState([]);
-  const polyline = route.points;
+  const parsedRoute = typeof route === "string" ? JSON.parse(route) : route;
+  const polyline = parsedRoute.points;
+  // console.log("Polyline from context:", polyline);
+
 
   useEffect(() => {
     if (typeof polyline === "string" && polyline.length > 0) {

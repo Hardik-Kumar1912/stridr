@@ -2,27 +2,50 @@
 
 import dynamic from "next/dynamic";
 import { useRoute } from "@/context/RouteContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const RouteMap = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
 export default function ResultPage() {
+  const [mounted, setMounted] = useState(false);
   const { route } = useRoute();
+  let parsedRoute = route;
+  if (typeof route === "string") {
+    try {
+      parsedRoute = JSON.parse(route);
+    } catch (e) {
+      parsedRoute = null;
+    }
+  }
+  // console.log("Route data:", route);
 
-  if (!route) {
-    return (
-      <div className="text-center mt-20 text-xl font-semibold text-red-600">
-        No route found. Please generate a route first.
-      </div>
-    );
+  useEffect(() => {
+    // Ensure the component is mounted before accessing localStorage
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null; // Prevent rendering until mounted
   }
 
-  const distanceInKm = (route.distance / 1000).toFixed(2);
-  const timeInMin = Math.round(route.time / 60000);
-  const estimatedCalories = Math.round((route.distance / 1000) * 50);
-  const turnCount = route.instructions?.length || 0;
+  const router = useRouter();
+
+  if (!parsedRoute || !parsedRoute.points) {
+    useEffect(() => {
+      toast.error("No route found. Please generate a route first.");
+      router.replace("/route");
+    }, [router]);
+    return null;
+  }
+
+  const distanceInKm = (parsedRoute.distance / 1000).toFixed(2);
+  const timeInMin = Math.round(parsedRoute.time / 60000);
+  const estimatedCalories = Math.round((parsedRoute.distance / 1000) * 50);
+  const turnCount = parsedRoute.instructions?.length || 0;
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-6 mt-20 mb-5 space-y-8">
