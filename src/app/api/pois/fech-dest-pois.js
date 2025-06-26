@@ -1,4 +1,4 @@
-import { PoiApiClass } from "./poi-api-syntax.js";
+import { poiSyntax } from "../../../utils/poiSyntax.js";
 
 export async function fetchDestPOIs([lon, lat], [lonDest, latDest], priorities) {
   if (!priorities || !Array.isArray(priorities) || priorities.length === 0) {
@@ -8,8 +8,8 @@ export async function fetchDestPOIs([lon, lat], [lonDest, latDest], priorities) 
   const overpassUrl = `https://overpass-api.de/api/interpreter`;
   const radius = 1000;
 
-  const poiApiSource = usePoiSyntax({ radius, longitude: lon, latitude: lat });
-  const poiApiDest = new usePoiSyntax({ radius, longitude: lonDest, latitude: latDest });
+  const poiApiSource = poiSyntax({ radius, longitude: lon, latitude: lat });
+  const poiApiDest = poiSyntax({ radius, longitude: lonDest, latitude: latDest });
 
   const query1 = `
   [out:json][timeout:25];

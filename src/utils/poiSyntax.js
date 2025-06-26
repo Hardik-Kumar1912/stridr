@@ -1,4 +1,4 @@
-export function usePoiSyntax({ radius = 1000, longitude, latitude }) {
+export function poiSyntax({ radius = 1000, longitude, latitude }) {
     return {
         parks: `
             node["leisure"~"^(park|playground|pitch|track|fitness_station|nature_reserve)$"](around:${radius},${latitude},${longitude});

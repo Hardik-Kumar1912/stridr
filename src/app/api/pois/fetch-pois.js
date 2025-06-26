@@ -1,4 +1,4 @@
-import { usePoiSyntax } from "../../../../hooks/PoiSyntaxHook.js";
+import { poiSyntax } from "../../../utils/poiSyntax.js";
 
 
 export async function fetchPOIs([lon, lat], radius, priorities) {
@@ -13,17 +13,16 @@ export async function fetchPOIs([lon, lat], radius, priorities) {
     throw new Error("Invalid radius provided. Radius must be a positive number.");
   }
 
-  const poiTypes = usePoiSyntax({ radius, longitude: lon, latitude: lat });
+  const poiTypes = poiSyntax({ radius, longitude: lon, latitude: lat });
 
   const overpassUrl = `https://overpass-api.de/api/interpreter`;
   const query = `
   [out:json][timeout:25];
   (
-    ${
-      priorities.map((priority) => {
+    ${priorities.map((priority) => {
     return poiTypes[priority];
   }).join('\n')
-}
+    }
   );
   out center;
 `;
