@@ -1,6 +1,9 @@
 import { PoiApiClass } from "./poi-api-syntax.js";
 
-export async function fetchDestPOIs([lon, lat], [lonDest, latDest]) {
+export async function fetchDestPOIs([lon, lat], [lonDest, latDest], priorities) {
+  if (!priorities || !Array.isArray(priorities) || priorities.length === 0) {
+    return [];
+  }
   // console.log(`Fetching POIs for route from ${lat}, ${lon} to ${latDest}, ${lonDest}`);
   const overpassUrl = `https://overpass-api.de/api/interpreter`;
   const radius = 1000;
@@ -11,43 +14,14 @@ export async function fetchDestPOIs([lon, lat], [lonDest, latDest]) {
   const query1 = `
   [out:json][timeout:25];
   (
-    // Parks, playgrounds, sport & fitness areas
-    ${poiApiSource.parks}
-
-    // Forests and natural wooded areas
-    ${poiApiSource.forest}
-
-    // Water bodies
-    ${poiApiSource.water}
-
-    // Scenic and cultural POIs
-    ${poiApiSource.touristic}
-
-    // Rest & refreshment
-    ${poiApiSource.resting}
-
-    // Emergency and medical
-    ${poiApiSource.medical}
+    ${priorities.map((priority) => poiApiSource[priority]).join('\n')}
   );
   out center;
 `;
   const query2 = `
   [out:json][timeout:25];
   (
-    // Parks, playgrounds, sport & fitness areas
-    ${poiApiDest.parks}
-    // Forests and natural wooded areas
-    ${poiApiDest.forest}
-    // Water bodies
-    ${poiApiDest.water}
-    // Scenic and cultural POIs
-    ${poiApiDest.touristic}
-
-    // Rest & refreshment
-    ${poiApiDest.resting}
-
-    // Emergency and medical
-    ${poiApiDest.medical}
+    ${priorities.map((priority) => poiApiDest[priority]).join('\n')}
   );
   out center;
 `;
@@ -68,23 +42,7 @@ export async function fetchDestPOIs([lon, lat], [lonDest, latDest]) {
     const query3 = `
     [out:json][timeout:25];
     (
-      // Parks, playgrounds, sport & fitness areas
-      ${poiApiMid.parks}
-      
-      // Forests and natural wooded areas
-      ${poiApiMid.forest}
-      
-      // Water bodies
-      ${poiApiMid.water}
-      
-      // Scenic and cultural POIs
-      ${poiApiMid.touristic}
-      
-      // Rest & refreshment
-      ${poiApiMid.resting}
-      
-      // Emergency and medical
-      ${poiApiMid.medical}
+      ${priorities.map((priority) => poiApiMid[priority]).join('\n')}
       );
       out center;
       `;

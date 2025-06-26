@@ -8,9 +8,17 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
 import { useRoute } from "@/context/RouteContext";
 
+const priorities = [
+    "parks",
+    "forest",
+    "water",
+    "touristic",
+    "resting",
+    "medical"
+];
+
 export default function CreateRoutePage() {
   const router = useRouter();
-
   const [tripType, setTripType] = useState("round");
   const [mounted, setMounted] = useState(false);
   const [startLocation, setStartLocation] = useState("");
@@ -93,6 +101,7 @@ export default function CreateRoutePage() {
         body: JSON.stringify({
           user_location_cords: [longitude, latitude],
           route_distance: Number(getDistanceFromInput()) * 1000,
+          priorities,
         }),
       });
 
@@ -118,6 +127,7 @@ export default function CreateRoutePage() {
         body: JSON.stringify({
           user_location_cords: [longitude, latitude],
           dest_location_cords,
+          priorities
         }),
       });
 

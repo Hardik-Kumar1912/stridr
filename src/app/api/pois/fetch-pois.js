@@ -1,8 +1,11 @@
 import { usePoiSyntax } from "../../../../hooks/PoiSyntaxHook.js";
 
 
-export async function fetchPOIs([lon, lat], radius) {
+export async function fetchPOIs([lon, lat], radius, priorities) {
   // console.log(`Fetching POIs around ${lat}, ${lon} with radius ${radius}`);
+  if (!priorities || !Array.isArray(priorities) || priorities.length === 0) {
+    return [];
+  }
   if (!lat || !lon || typeof lat !== "number" || typeof lon !== "number") {
     throw new Error("Invalid coordinates provided. Latitude and longitude must be numbers.");
   }
@@ -10,29 +13,17 @@ export async function fetchPOIs([lon, lat], radius) {
     throw new Error("Invalid radius provided. Radius must be a positive number.");
   }
 
-  const { parks, forest, water, touristic, resting, medical } = usePoiSyntax({ radius, longitude: lon, latitude: lat });
+  const poiTypes = usePoiSyntax({ radius, longitude: lon, latitude: lat });
 
   const overpassUrl = `https://overpass-api.de/api/interpreter`;
   const query = `
   [out:json][timeout:25];
   (
-    // Parks, playgrounds, sport & fitness areas
-    ${parks}
-
-    // Forests and natural wooded areas
-    ${forest}
-
-    // Water bodies
-    ${water}
-
-    // Scenic and cultural POIs
-    ${touristic}
-
-    // Rest & refreshment
-    ${resting}
-
-    // Emergency and medical
-    ${medical}
+    ${
+      priorities.map((priority) => {
+    return poiTypes[priority];
+  }).join('\n')
+}
   );
   out center;
 `;

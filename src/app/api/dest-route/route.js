@@ -8,7 +8,7 @@ import { auth } from "@clerk/nextjs/server";
 export async function POST(req) {
   await auth.protect();
   console.log("Received request to modify route");
-  const { user_location_cords, dest_location_cords } = await req.json();
+  const { user_location_cords, dest_location_cords, priorities } = await req.json();
 
   console.log("User location coordinates:", user_location_cords);
   console.log("Destination location coordinates:", dest_location_cords);
@@ -18,7 +18,7 @@ export async function POST(req) {
       { status: 400 },
     );
   }
-  const pois = await fetchDestPOIs(user_location_cords, dest_location_cords);
+  const pois = await fetchDestPOIs(user_location_cords, dest_location_cords, priorities);
 
 
 
