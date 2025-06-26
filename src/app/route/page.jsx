@@ -8,13 +8,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
 import { useRoute } from "@/context/RouteContext";
 
-const priorities = [
-    "parks",
-    "forest",
-    "water",
-    "touristic",
-    "resting",
-    "medical"
+const prioritiesList = [
+  "parks",
+  "forest",
+  "water",
+  "touristic",
+  "resting",
+  "medical"
 ];
 
 export default function CreateRoutePage() {
@@ -28,6 +28,7 @@ export default function CreateRoutePage() {
   const [time, setTime] = useState("");
   const [calories, setCalories] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedPriorities, setSelectedPriorities] = useState([]);
   const { setRoute } = useRoute();
 
   useEffect(() => {
@@ -66,87 +67,96 @@ export default function CreateRoutePage() {
   };
 
   const handleSubmit = async () => {
-  setLoading(true);
-  try {
-    if (!("geolocation" in navigator)) {
-      alert("Geolocation not supported by your browser.");
-      return;
-    }
-
-    const coords = await new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: true,
-        timeout: 10000,
-      });
-    });
-
-    const { latitude, longitude } = coords.coords;
-
-    if (!startLocation) {
-      alert("Please enter a starting location or use your current location.");
-      setLoading(false);
-      return;
-    }
-
-    if (tripType === "destination" && !destination) {
-      alert("Please enter a destination.");
-      setLoading(false);
-      return;
-    }
-
-    if (tripType === "round") {
-      const res = await fetch("/api/round-route", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_location_cords: [longitude, latitude],
-          route_distance: Number(getDistanceFromInput()) * 1000,
-          priorities,
-        }),
-      });
-
-      const data = await res.json();
-      if (!data?.route[0]) throw new Error("No route generated");
-
-      const route = data.route[0];
-      setRoute(route);
-      router.push("/result");
-    } else if (tripType === "destination") {
-      const geoRes = await fetch(`/api/forwardGeocode?place=${encodeURIComponent(destination)}`);
-      const geoData = await geoRes.json();
-
-      if (!geoData?.coords) {
-        throw new Error("Could not geocode destination");
+    setLoading(true);
+    try {
+      if (!("geolocation" in navigator)) {
+        alert("Geolocation not supported by your browser.");
+        return;
       }
 
-      const dest_location_cords = geoData.coords;
-
-      const res = await fetch("/api/dest-route", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_location_cords: [longitude, latitude],
-          dest_location_cords,
-          priorities
-        }),
+      const coords = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+        });
       });
 
-      const data = await res.json();
-      console.log("Destination Route Data:", data.route);
-      if (!data?.route[0]) throw new Error("No route generated");
+      const { latitude, longitude } = coords.coords;
 
-      const route = data.route[0];
-      setRoute(route);
-      router.push("/result");
+      if (!startLocation) {
+        alert("Please enter a starting location or use your current location.");
+        setLoading(false);
+        return;
+      }
+
+      if (tripType === "destination" && !destination) {
+        alert("Please enter a destination.");
+        setLoading(false);
+        return;
+      }
+
+      const priorities = selectedPriorities;
+
+      if (tripType === "round") {
+        const res = await fetch("/api/round-route", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_location_cords: [longitude, latitude],
+            route_distance: Number(getDistanceFromInput()) * 1000,
+            priorities,
+          }),
+        });
+
+        const data = await res.json();
+        if (!data?.route[0]) throw new Error("No route generated");
+
+        const route = data.route[0];
+        setRoute(route);
+        router.push("/result");
+      } else if (tripType === "destination") {
+        const geoRes = await fetch(`/api/forwardGeocode?place=${encodeURIComponent(destination)}`);
+        const geoData = await geoRes.json();
+
+        if (!geoData?.coords) {
+          throw new Error("Could not geocode destination");
+        }
+
+        const dest_location_cords = geoData.coords;
+
+        const res = await fetch("/api/dest-route", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_location_cords: [longitude, latitude],
+            dest_location_cords,
+            priorities
+          }),
+        });
+
+        const data = await res.json();
+        console.log("Destination Route Data:", data.route);
+        if (!data?.route[0]) throw new Error("No route generated");
+
+        const route = data.route[0];
+        setRoute(route);
+        router.push("/result");
+      }
+    } catch (error) {
+      console.error("Route generation failed:", error);
+      alert("Failed to generate route. Please try again.");
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Route generation failed:", error);
-    alert("Failed to generate route. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
+  const togglePriority = (priority) => {
+    setSelectedPriorities((prev) =>
+      prev.includes(priority)
+        ? prev.filter((p) => p !== priority)
+        : [...prev, priority]
+    );
+  };
 
   return (
     <main className="mt-20 mb-5 max-w-7xl mx-auto py-12 px-4 sm:px-6">
@@ -212,9 +222,9 @@ export default function CreateRoutePage() {
               </div>
             )}
 
+            {/* Goal Type (only for round trip) */}
             {tripType === "round" && (
               <>
-                {/* Input Type Selector */}
                 <div className="space-y-2">
                   <Label>Goal Type</Label>
                   <RadioGroup
@@ -251,7 +261,6 @@ export default function CreateRoutePage() {
                     />
                   </div>
                 )}
-
                 {inputType === "time" && (
                   <div className="space-y-2">
                     <Label htmlFor="time">Expected Time (in minutes)</Label>
@@ -265,7 +274,6 @@ export default function CreateRoutePage() {
                     />
                   </div>
                 )}
-
                 {inputType === "calories" && (
                   <div className="space-y-2">
                     <Label htmlFor="calories">Calories to Burn (in kcal)</Label>
@@ -282,9 +290,29 @@ export default function CreateRoutePage() {
               </>
             )}
 
+            {/* Priorities Checkbox */}
+            <div className="space-y-2">
+              <Label>Select Priorities (optional)</Label>
+              <div className="grid grid-cols-2 gap-2 mt-4">
+                {prioritiesList.map((priority) => (
+                  <div key={priority} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id={priority}
+                      value={priority}
+                      checked={selectedPriorities.includes(priority)}
+                      onChange={() => togglePriority(priority)}
+                    />
+                    <Label htmlFor={priority} className="capitalize">
+                      {priority}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <p className="text-sm text-muted-foreground">
-              * Estimates based on average walking speed (6 km/h) and 50
-              kcal/km.
+              * Estimates based on average walking speed (6 km/h) and 50 kcal/km.
             </p>
 
             <Button

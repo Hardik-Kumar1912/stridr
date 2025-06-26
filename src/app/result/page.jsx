@@ -5,6 +5,7 @@ import { useRoute } from "@/context/RouteContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const RouteMap = dynamic(() => import("@/components/Map"), {
   ssr: false,
@@ -13,6 +14,8 @@ const RouteMap = dynamic(() => import("@/components/Map"), {
 export default function ResultPage() {
   const [mounted, setMounted] = useState(false);
   const { route } = useRoute();
+  const router = useRouter();
+
   let parsedRoute = route;
   if (typeof route === "string") {
     try {
@@ -21,18 +24,12 @@ export default function ResultPage() {
       parsedRoute = null;
     }
   }
-  // console.log("Route data:", route);
 
   useEffect(() => {
-    // Ensure the component is mounted before accessing localStorage
     setMounted(true);
   }, []);
 
-  if (!mounted) {
-    return null; // Prevent rendering until mounted
-  }
-
-  const router = useRouter();
+  if (!mounted) return null;
 
   if (!parsedRoute || !parsedRoute.points) {
     useEffect(() => {
@@ -46,6 +43,10 @@ export default function ResultPage() {
   const timeInMin = Math.round(parsedRoute.time / 60000);
   const estimatedCalories = Math.round((parsedRoute.distance / 1000) * 50);
   const turnCount = parsedRoute.instructions?.length || 0;
+
+  const handleCreateNew = () => {
+    router.push("/route");
+  };
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-6 mt-20 mb-5 space-y-8">
@@ -78,6 +79,11 @@ export default function ResultPage() {
       {/* Map Section */}
       <div className="w-full h-[500px] rounded-xl overflow-hidden shadow-md">
         <RouteMap />
+      </div>
+
+      {/* Button Section */}
+      <div className="text-center">
+        <Button onClick={handleCreateNew}>Create Another Route</Button>
       </div>
     </div>
   );
