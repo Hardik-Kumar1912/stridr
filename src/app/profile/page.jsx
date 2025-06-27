@@ -10,6 +10,15 @@ import { UserIcon } from "lucide-react";
 import { UploadButton } from "@/utils/uploadthing";
 import { useUser } from "@clerk/nextjs";
 
+const prioritiesList = [
+  "parks",
+  "forest",
+  "water",
+  "touristic",
+  "resting",
+  "medical",
+];
+
 export default function ProfilePage() {
   const { user, isLoaded } = useUser();
   const [gender, setGender] = useState("male");
@@ -17,6 +26,7 @@ export default function ProfilePage() {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [address, setAddress] = useState("");
+  const [priorities, setPriorities] = useState([]);
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
@@ -30,10 +40,49 @@ export default function ProfilePage() {
       setGender(user.gender || "male");
       setAge(user.publicMetadata?.age || "");
       setAddress(user.publicMetadata?.address || "");
+      setPriorities(user.publicMetadata?.priorities || []);
     }
   }, [user, isLoaded]);
 
+  const handlePriorityChange = (value) => {
+    setPriorities((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
+  };
+
   if (!hasMounted || !isLoaded) return null;
+
+  const handleSave = async () => {
+  try {
+    const res = await fetch("/api/profile/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        name,
+        age,
+        address,
+        gender,
+        profileImage,
+        priorities,
+      }),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert("Profile saved successfully!");
+    } else {
+      alert("Error saving profile");
+    }
+  } catch (err) {
+    console.error("Save failed", err);
+    alert("Something went wrong");
+  }
+};
+
+
 
   return (
     <main className="max-w-2xl mx-auto py-12 px-4 sm:px-6 mt-20 mb-10 space-y-8 bg-[#fdfcf7] rounded-xl shadow-md">
@@ -89,7 +138,7 @@ export default function ProfilePage() {
             }}
             content={{
               button({ isUploading }) {
-                return isUploading ? "Uploading..." : "Upload Profile Image";
+                return isUploading ? "Uploading..." : "Edit Profile Image";
               },
             }}
           />
@@ -133,24 +182,14 @@ export default function ProfilePage() {
           onValueChange={(value) => setGender(value)}
           className="flex flex-col sm:flex-row gap-4"
         >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="male" id="male" />
-            <Label htmlFor="male" className="capitalize text-[#33691e]">
-              Male
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="female" id="female" />
-            <Label htmlFor="female" className="capitalize text-[#33691e]">
-              Female
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="other" id="other" />
-            <Label htmlFor="other" className="capitalize text-[#33691e]">
-              Other
-            </Label>
-          </div>
+          {["male", "female", "other"].map((g) => (
+            <div key={g} className="flex items-center space-x-2">
+              <RadioGroupItem value={g} id={g} />
+              <Label htmlFor={g} className="capitalize text-[#33691e]">
+                {g}
+              </Label>
+            </div>
+          ))}
         </RadioGroup>
       </div>
 
@@ -168,7 +207,28 @@ export default function ProfilePage() {
         />
       </div>
 
-      <Button className="w-full mt-4 bg-[#388e3c] hover:bg-[#2e7d32] text-white">
+      {/* Priorities */}
+      <div className="space-y-2">
+        <Label className="text-[#2e7d32] mb-2">Preferred Priorities</Label>
+        <div className="grid grid-cols-2 gap-2">
+          {prioritiesList.map((priority) => (
+            <label
+              key={priority}
+              className="flex items-center space-x-2 text-[#33691e]"
+            >
+              <input
+                type="checkbox"
+                value={priority}
+                checked={priorities.includes(priority)}
+                onChange={() => handlePriorityChange(priority)}
+              />
+              <span className="capitalize">{priority}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <Button className="w-full mt-4 bg-[#388e3c] hover:bg-[#2e7d32] text-white" onClick={handleSave}>
         Save Profile
       </Button>
     </main>

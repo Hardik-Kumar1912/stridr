@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
 import { useRoute } from "@/context/RouteContext";
+import { useUser } from "@clerk/nextjs";
 
 const prioritiesList = [
   "parks",
@@ -19,6 +20,7 @@ const prioritiesList = [
 
 export default function CreateRoutePage() {
   const router = useRouter();
+  const { user, isLoaded } = useUser();
   const [tripType, setTripType] = useState("round");
   const [mounted, setMounted] = useState(false);
   const [startLocation, setStartLocation] = useState("");
@@ -30,6 +32,9 @@ export default function CreateRoutePage() {
   const [loading, setLoading] = useState(false);
   const [selectedPriorities, setSelectedPriorities] = useState([]);
   const { setRoute } = useRoute();
+
+  const savedAddress = user?.publicMetadata?.address || "";
+  const savedPriorities = user?.publicMetadata?.priorities || [];
 
   useEffect(() => {
     setMounted(true);
@@ -135,7 +140,6 @@ export default function CreateRoutePage() {
         });
 
         const data = await res.json();
-        console.log("Destination Route Data:", data.route);
         if (!data?.route[0]) throw new Error("No route generated");
 
         const route = data.route[0];
@@ -187,6 +191,15 @@ export default function CreateRoutePage() {
                   Use Current Location
                 </Button>
               </div>
+              {isLoaded && savedAddress && (
+                <Button
+                  variant="outline"
+                  className="mt-2 w-full sm:w-auto"
+                  onClick={() => setStartLocation(savedAddress)}
+                >
+                  Use Address
+                </Button>
+              )}
             </div>
 
             {/* Trip Type */}
@@ -309,6 +322,15 @@ export default function CreateRoutePage() {
                   </div>
                 ))}
               </div>
+              {isLoaded && savedPriorities.length > 0 && (
+                <Button
+                  variant="outline"
+                  className="mt-2 w-full sm:w-auto"
+                  onClick={() => setSelectedPriorities(savedPriorities)}
+                >
+                  Use Saved Priorities
+                </Button>
+              )}
             </div>
 
             <p className="text-sm text-muted-foreground">
