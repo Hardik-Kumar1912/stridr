@@ -34,10 +34,12 @@ export async function fetchPOIs([lon, lat], radius, priorities) {
   });
 
   const data = await res.json();
-  console.log(`Fetched ${data.elements.length} POIs`);
-  console.log("----- POI Data -----");
-  console.log(data);
-  console.log("-------POI DATA END-------");
+  if(process.env.NEXT_PUBLIC_DEBUGGING === "ON") {
+    console.log(`Fetched ${data.elements.length} POIs`);
+    console.log("----- POI Data -----");
+    console.log(data);
+    console.log("-------POI DATA END-------");
+  }
   return data.elements
     .map((el) => {
       if (el.lat != null && el.lon != null) {

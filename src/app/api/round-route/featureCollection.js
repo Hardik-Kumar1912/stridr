@@ -4,6 +4,10 @@ export async function getFeatureCollection(pois) {
     console.error("No points of interest provided:", pois);
     return {};
   }
+  if (process.env.NEXT_PUBLIC_DEBUGGING === "ON") {
+    console.log("Generating feature collection for this many POIs:", pois.length);
+  }
+
   // console.log("Points of interest:", pois);
   const features = [];
   pois.forEach((poi, index) => {
@@ -32,6 +36,8 @@ export async function getFeatureCollection(pois) {
     type: "FeatureCollection",
     features: features,
   };
-  // console.log("Generated feature collection:", featureCollection);
+  if (process.env.NEXT_PUBLIC_DEBUGGING === "ON") {
+    console.log("Feature collection generated with", features.length, "features.");
+  }
   return featureCollection;
 }

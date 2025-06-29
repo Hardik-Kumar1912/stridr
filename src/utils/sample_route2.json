@@ -1,0 +1,301 @@
+{
+  "distance": 3767.92,
+  "weight": 3297.335444,
+  "time": 2712902,
+  "transfers": 0,
+  "points_encoded": true,
+  "points_encoded_multiplier": 100000,
+  "bbox": [77.211788, 28.616291, 77.225371, 28.623384],
+  "points": "ykumDqajvMBFIDCN_Bt@lA~DdDnJv@nBtBdGF`@@j@IhDpBD?Xz@B@\\BLHXPVTPVHZBXCRLJFPZvE`N`DpJVMjAjD\\?Ch@TDTJHLFNDN@PCPALEHLMNINE`@@An@]AGRq@ZOc@IBKBK@KAMCKEIGGIIMEW?Q@SBK[LuEC@yAI[YMq@M_AGBuBEKMEmGQMBGJGWAK@{A[?U@eAgCEw@HGHOFO@SCQGQKOOINQd@_ATe@tCeGJc@@i@AQHLP[NOLGGCGIDWLQEu@Aa@JEKKY[EGKEgBgFeAaDYg@SaAaDgJs@wBQQ{@cC",
+  "instructions": [
+    {
+      "distance": 5.052,
+      "heading": 242.8,
+      "sign": 0,
+      "interval": [0, 1],
+      "text": "Continue onto Firoz Shah Road",
+      "time": 3638,
+      "street_name": "Firoz Shah Road"
+    },
+    {
+      "distance": 5.861,
+      "sign": 2,
+      "interval": [1, 2],
+      "text": "Turn right onto Kasturba Gandhi Marg",
+      "time": 4220,
+      "street_name": "Kasturba Gandhi Marg"
+    },
+    {
+      "distance": 68.418,
+      "sign": -2,
+      "interval": [2, 4],
+      "text": "Turn left",
+      "time": 49261,
+      "street_name": ""
+    },
+    {
+      "distance": 633.754,
+      "sign": -2,
+      "interval": [4, 11],
+      "text": "Turn left onto Harish Chandra Mathur Lane",
+      "time": 456303,
+      "street_name": "Harish Chandra Mathur Lane"
+    },
+    {
+      "distance": 63.032,
+      "sign": -2,
+      "interval": [11, 12],
+      "text": "Turn left onto Janpath",
+      "time": 45383,
+      "street_name": "Janpath"
+    },
+    {
+      "distance": 12.148,
+      "sign": 2,
+      "interval": [12, 13],
+      "text": "Turn right",
+      "time": 8747,
+      "street_name": ""
+    },
+    {
+      "distance": 33.145,
+      "sign": -2,
+      "interval": [13, 14],
+      "text": "Turn left onto Janpath",
+      "time": 23864,
+      "street_name": "Janpath"
+    },
+    {
+      "exit_number": 1,
+      "distance": 614.442,
+      "sign": 6,
+      "exited": true,
+      "turn_angle": -2.71,
+      "interval": [14, 27],
+      "text": "At roundabout, take exit 1 onto Raisina Road",
+      "time": 442398,
+      "street_name": "Raisina Road"
+    },
+    {
+      "distance": 15.323,
+      "sign": -2,
+      "interval": [27, 28],
+      "text": "Turn left",
+      "time": 11033,
+      "street_name": ""
+    },
+    {
+      "distance": 109.792,
+      "sign": 2,
+      "interval": [28, 30],
+      "text": "Turn right",
+      "time": 79050,
+      "street_name": ""
+    },
+    {
+      "distance": 20.814,
+      "sign": 2,
+      "interval": [30, 31],
+      "text": "Turn right",
+      "time": 14986,
+      "street_name": ""
+    },
+    {
+      "exit_number": 1,
+      "distance": 131.333,
+      "sign": 6,
+      "exited": true,
+      "turn_angle": 0.77,
+      "interval": [31, 44],
+      "text": "At roundabout, take exit 1 onto Rafi Ahmed Kidwai Marg",
+      "time": 94561,
+      "street_name": "Rafi Ahmed Kidwai Marg"
+    },
+    {
+      "distance": 23.746,
+      "sign": 2,
+      "interval": [44, 45],
+      "text": "Turn right",
+      "time": 17097,
+      "street_name": ""
+    },
+    {
+      "distance": 0,
+      "sign": 5,
+      "last_heading": 273.16908798452255,
+      "interval": [45, 45],
+      "text": "Waypoint 1",
+      "time": 0,
+      "street_name": ""
+    },
+    {
+      "distance": 26.767,
+      "heading": 1.47,
+      "sign": 0,
+      "interval": [45, 47],
+      "text": "Continue",
+      "time": 19272,
+      "street_name": ""
+    },
+    {
+      "distance": 30.453,
+      "sign": 1,
+      "interval": [47, 48],
+      "text": "Turn slight right",
+      "time": 21926,
+      "street_name": ""
+    },
+    {
+      "distance": 20.298,
+      "sign": 2,
+      "interval": [48, 49],
+      "text": "Turn right onto Raisina Road",
+      "time": 14615,
+      "street_name": "Raisina Road"
+    },
+    {
+      "exit_number": 2,
+      "distance": 237.227,
+      "sign": 6,
+      "exited": true,
+      "turn_angle": 1.6,
+      "interval": [49, 64],
+      "text": "At roundabout, take exit 2 onto Rafi Marg",
+      "time": 170803,
+      "street_name": "Rafi Marg"
+    },
+    {
+      "distance": 138.119,
+      "sign": 2,
+      "interval": [64, 69],
+      "text": "Turn right",
+      "time": 99446,
+      "street_name": ""
+    },
+    {
+      "distance": 238.372,
+      "sign": 2,
+      "interval": [69, 75],
+      "text": "Turn right",
+      "time": 171628,
+      "street_name": ""
+    },
+    {
+      "distance": 63.367,
+      "sign": 3,
+      "interval": [75, 78],
+      "text": "Turn sharp right",
+      "time": 45624,
+      "street_name": ""
+    },
+    {
+      "distance": 27.344,
+      "sign": -2,
+      "interval": [78, 80],
+      "text": "Turn left",
+      "time": 19688,
+      "street_name": ""
+    },
+    {
+      "distance": 78.018,
+      "sign": 2,
+      "interval": [80, 81],
+      "text": "Turn right",
+      "time": 56173,
+      "street_name": ""
+    },
+    {
+      "distance": 27.39,
+      "sign": 7,
+      "interval": [81, 82],
+      "text": "Keep right",
+      "time": 19721,
+      "street_name": ""
+    },
+    {
+      "exit_number": 2,
+      "distance": 347.192,
+      "sign": 6,
+      "exited": true,
+      "turn_angle": -2.22,
+      "interval": [82, 97],
+      "text": "At roundabout, take exit 2 onto Ashoka Road",
+      "time": 249978,
+      "street_name": "Ashoka Road"
+    },
+    {
+      "exit_number": 1,
+      "distance": 45.583,
+      "sign": 6,
+      "exited": true,
+      "interval": [97, 101],
+      "text": "At roundabout, take exit 1 onto Windsor Place",
+      "time": 32819,
+      "street_name": "Windsor Place"
+    },
+    {
+      "distance": 34.908,
+      "sign": -3,
+      "interval": [101, 105],
+      "text": "Turn sharp left",
+      "time": 25134,
+      "street_name": ""
+    },
+    {
+      "distance": 44.103,
+      "sign": -2,
+      "interval": [105, 107],
+      "text": "Turn left",
+      "time": 31754,
+      "street_name": ""
+    },
+    {
+      "exit_number": 1,
+      "distance": 49.2,
+      "sign": 6,
+      "exited": true,
+      "interval": [107, 112],
+      "text": "At roundabout, take exit 1 onto Firoz Shah Road",
+      "time": 35424,
+      "street_name": "Firoz Shah Road"
+    },
+    {
+      "distance": 215.038,
+      "sign": 1,
+      "interval": [112, 114],
+      "text": "Turn slight right onto Firoz Shah Road",
+      "time": 154828,
+      "street_name": "Firoz Shah Road"
+    },
+    {
+      "distance": 321.823,
+      "sign": -7,
+      "interval": [114, 118],
+      "text": "Keep left onto Firoz Shah Road",
+      "time": 231711,
+      "street_name": "Firoz Shah Road"
+    },
+    {
+      "distance": 85.857,
+      "sign": -7,
+      "interval": [118, 120],
+      "text": "Keep left onto Firoz Shah Road",
+      "time": 61817,
+      "street_name": "Firoz Shah Road"
+    },
+    {
+      "distance": 0,
+      "sign": 4,
+      "last_heading": 62.79617434633823,
+      "interval": [120, 120],
+      "text": "Arrive at destination",
+      "time": 0,
+      "street_name": ""
+    }
+  ],
+  "legs": [],
+  "details": {},
+  "ascend": 0,
+  "descend": 0,
+  "snapped_waypoints": "ykumDqajvM|g@lrA}g@mrA"
+}

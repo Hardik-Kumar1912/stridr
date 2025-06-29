@@ -8,6 +8,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
 import { useRoute } from "@/context/RouteContext";
 import { useUser } from "@clerk/nextjs";
+import getCurrentLocation from "@/utils/getUserLocation";
+import { toast } from "sonner";
+import sampleRoute from "@/utils/sample_route1.json";
 
 const prioritiesList = [
   "parks",
@@ -15,7 +18,8 @@ const prioritiesList = [
   "water",
   "touristic",
   "resting",
-  "medical"
+  "cafe",
+  "medical",
 ];
 
 export default function CreateRoutePage() {
@@ -26,11 +30,13 @@ export default function CreateRoutePage() {
   const [startLocation, setStartLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [inputType, setInputType] = useState("distance");
-  const [distance, setDistance] = useState("");
-  const [time, setTime] = useState("");
-  const [calories, setCalories] = useState("");
+  const [distance, setDistance] = useState(1);
+  const [time, setTime] = useState(30);
+  const [calories, setCalories] = useState(1000);
   const [loading, setLoading] = useState(false);
   const [selectedPriorities, setSelectedPriorities] = useState([]);
+  const [lat, setLat] = useState(28.622884208666946); // Default coordinates for New Delhi
+  const [lng, setLng] = useState(77.22535192598555);
   const { setRoute } = useRoute();
 
   const savedAddress = user?.publicMetadata?.address || "";
@@ -49,53 +55,35 @@ export default function CreateRoutePage() {
     return 0;
   };
 
-  const getCurrentLocation = async () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          const { address } = await fetch(
-            `/api/reverseGeocode?lat=${latitude}&lon=${longitude}`
-          ).then((res) => res.json());
-
-          if (address) setStartLocation(address);
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          alert("Could not fetch location. Please allow location access.");
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-      );
-    } else {
-      alert("Geolocation is not supported by your browser.");
-    }
-  };
-
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      if (!("geolocation" in navigator)) {
-        alert("Geolocation not supported by your browser.");
-        return;
-      }
-
-      const coords = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-        });
-      });
-
-      const { latitude, longitude } = coords.coords;
-
       if (!startLocation) {
-        alert("Please enter a starting location or use your current location.");
+        toast.error(
+          "Please enter a starting location or use your current location."
+        );
         setLoading(false);
         return;
       }
+      if (!lat || !lng) {
+        const geoRes = await fetch(
+          `/api/forwardGeocode?place=${encodeURIComponent(startLocation)}`
+        );
+        const geoData = await geoRes.json();
+
+        if (!geoData?.coords) {
+          setLoading(false);
+          toast.error("Could not geocode starting location");
+          throw new Error("Could not geocode starting location");
+        }
+        toast.success("Starting location geocoded successfully");
+        const [latitude, longitude] = geoData.coords;
+        setLat(latitude);
+        setLng(longitude);
+      }
 
       if (tripType === "destination" && !destination) {
-        alert("Please enter a destination.");
+        toast.error("Please enter a destination.");
         setLoading(false);
         return;
       }
@@ -107,7 +95,7 @@ export default function CreateRoutePage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            user_location_cords: [longitude, latitude],
+            user_location_cords: [lng, lat],
             route_distance: Number(getDistanceFromInput()) * 1000,
             priorities,
           }),
@@ -120,10 +108,14 @@ export default function CreateRoutePage() {
         setRoute(route);
         router.push("/result");
       } else if (tripType === "destination") {
-        const geoRes = await fetch(`/api/forwardGeocode?place=${encodeURIComponent(destination)}`);
+        const geoRes = await fetch(
+          `/api/forwardGeocode?place=${encodeURIComponent(destination)}`
+        );
         const geoData = await geoRes.json();
 
         if (!geoData?.coords) {
+          setLoading(false);
+          toast.error("Could not geocode destination");
           throw new Error("Could not geocode destination");
         }
 
@@ -133,9 +125,9 @@ export default function CreateRoutePage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            user_location_cords: [longitude, latitude],
+            user_location_cords: [lng, lat],
             dest_location_cords,
-            priorities
+            priorities,
           }),
         });
 
@@ -148,12 +140,16 @@ export default function CreateRoutePage() {
       }
     } catch (error) {
       console.error("Route generation failed:", error);
-      alert("Failed to generate route. Please try again.");
+      toast.error("Failed to generate route. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleTrySampleRoute = async () => {
+    setRoute(sampleRoute);
+    router.push("/result");
+  };
   const togglePriority = (priority) => {
     setSelectedPriorities((prev) =>
       prev.includes(priority)
@@ -185,7 +181,13 @@ export default function CreateRoutePage() {
                 />
                 <Button
                   variant="outline"
-                  onClick={getCurrentLocation}
+                  onClick={async () => {
+                    const { latitude, longitude, address } =
+                      await getCurrentLocation();
+                    setLat(latitude);
+                    setLng(longitude);
+                    setStartLocation(address);
+                  }}
                   className="whitespace-nowrap"
                 >
                   Use Current Location
@@ -334,7 +336,8 @@ export default function CreateRoutePage() {
             </div>
 
             <p className="text-sm text-muted-foreground">
-              * Estimates based on average walking speed (6 km/h) and 50 kcal/km.
+              * Estimates based on average walking speed (6 km/h) and 50
+              kcal/km.
             </p>
 
             <Button
@@ -343,6 +346,10 @@ export default function CreateRoutePage() {
               disabled={loading}
             >
               {loading ? "Creating..." : "Next"}
+            </Button>
+            {/* for the case when server is down add a sample / try button */}
+            <Button variant="outline" className="w-full mt-2" onClick={handleTrySampleRoute}>
+              Server Down? Try Sample Route
             </Button>
           </div>
         </div>

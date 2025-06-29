@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { UserIcon } from "lucide-react";
 import { UploadButton } from "@/utils/uploadthing";
 import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 const prioritiesList = [
   "parks",
@@ -16,6 +17,7 @@ const prioritiesList = [
   "water",
   "touristic",
   "resting",
+  "cafe",
   "medical",
 ];
 
@@ -72,13 +74,13 @@ export default function ProfilePage() {
 
     const data = await res.json();
     if (data.success) {
-      alert("Profile saved successfully!");
+      toast.success("Profile saved successfully!");
     } else {
-      alert("Error saving profile");
+      toast.error("Error saving profile");
     }
   } catch (err) {
     console.error("Save failed", err);
-    alert("Something went wrong");
+    toast.error("Something went wrong");
   }
 };
 
@@ -113,11 +115,11 @@ export default function ProfilePage() {
             endpoint="imageUploader"
             onClientUploadComplete={(res) => {
               console.log("Files: ", res);
-              alert("Upload Completed");
+              toast.success("Upload Completed");
               setProfileImage(res?.[0]?.url);
             }}
             onUploadError={(error) => {
-              alert(`ERROR! ${error.message}`);
+              toast.error(`ERROR! ${error.message}`);
             }}
             appearance={{
               button: {

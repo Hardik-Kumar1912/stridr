@@ -11,40 +11,93 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import getCurrentLocation from "@/utils/getUserLocation.js";
+import { useRoute } from "@/context/RouteContext.js";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const { user } = useUser();
+  const [currentLat, setCurrentLat] = useState(28.622884208666946);
+  const [currentLng, setCurrentLng] = useState(77.22535192598555);
+  const [startLocation, setStartLocation] = useState("");
+  const { setRoute } = useRoute();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const routes = [
     {
       title: "Morning Park Loop",
       description: "Perfect 3km jog with tree-lined paths and water stalls.",
       image: "/sun.png",
+      priorities: ["parks", "water", "resting"],
     },
     {
       title: "Sunset Riverside Run",
       description:
         "5km flat route along the river, great for stamina building.",
       image: "/river.png",
+      priorities: ["water", "resting", "touristic"],
     },
     {
       title: "Cafe Circuit",
       description: "Ideal walking route with coffee breaks and chill vibes.",
       image: "/cafe3.png",
+      priorities: ["cafe", "resting"],
     },
     {
       title: "Green Trail Sprint",
       description:
         "Fast-paced track with 2.5km lap distance, minimal foot traffic.",
       image: "/green.png",
+      priorities: ["forest", "parks", "medical"],
     },
     {
       title: "City Lights Walk",
       description:
         "Night-friendly route with street lighting and easy terrain.",
       image: "/street.png",
+      priorities: ["parks", "water", "medical"],
     },
   ];
 
-  const { user } = useUser();
+  const handleClick = async (
+    priorities,
+    lat = currentLat,
+    lng = currentLng
+  ) => {
+    setLoading(true);
+    try {
+      if (process.env.NEXT_PUBLIC_DEBUGGING === "ON") {
+        console.log("Current Location:", lat, lng);
+        console.log("Priorities", priorities);
+        console.log({
+          user_location_cords: [lat, lng],
+          route_distance: 1000,
+          priorities: priorities,
+        });
+      }
+      const res = await fetch("/api/round-route", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_location_cords: [lng, lat],
+          route_distance: 5000, // Default distance of 5km
+          priorities: priorities,
+        }),
+      });
+      const data = await res.json();
+      if (!data?.route[0]) throw new Error("No route generated");
+      const route = data.route[0];
+      setRoute(route);
+      router.push("/result");
+    } catch (error) {
+      console.error("Error generating route:", error);
+      toast.error("Failed to generate route. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -115,6 +168,15 @@ export default function Home() {
                 <CarouselItem
                   key={index}
                   className="md:basis-1/2 lg:basis-1/3 p-4"
+                  onClick={async () => {
+                    const { latitude, longitude, address } =
+                      await getCurrentLocation();
+                    setCurrentLat(latitude);
+                    setCurrentLng(longitude);
+                    setStartLocation(address);
+                    handleClick(route.priorities, latitude, longitude);
+                  }}
+                  role="button"
                 >
                   <div className="h-full bg-background border rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden">
                     <img

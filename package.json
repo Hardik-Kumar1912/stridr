@@ -3,14 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@clerk/clerk-sdk-node": "^5.1.6",
     "@clerk/nextjs": "^6.22.0",
     "@mapbox/polyline": "^1.2.1",
     "@radix-ui/react-dialog": "^1.1.14",

@@ -4,7 +4,9 @@ export async function fetchDestPOIs([lon, lat], [lonDest, latDest], priorities) 
   if (!priorities || !Array.isArray(priorities) || priorities.length === 0) {
     return [];
   }
-  // console.log(`Fetching POIs for route from ${lat}, ${lon} to ${latDest}, ${lonDest}`);
+  if (process.env.NEXT_PUBLIC_DEBUGGING === "ON") {
+    console.log(`Fetching POIs for route from ${lat}, ${lon} to ${latDest}, ${lonDest} with priorities: ${priorities.join(', ')}`);
+  }
   const overpassUrl = `https://overpass-api.de/api/interpreter`;
   const radius = 1000;
 

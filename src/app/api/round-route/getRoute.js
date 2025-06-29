@@ -2,22 +2,17 @@ export async function getRoute(
   user_location_cords, // [lon, lat]
   route_distance,
   poiCount,
-  featureCollection,
+  featureCollection
 ) {
   const GRAPHHOPPER_HOST_URL =
     process.env.GRAPHHOPPER_HOST_URL || "http://localhost:8989";
   const url = `${GRAPHHOPPER_HOST_URL}/route`;
 
   const customModel = {
-    priority: Array.from(
-      { length: poiCount },
-      (_, i) => (
-        {
-          if: `in_primary_poi_${i}`,
-          multiply_by: "5",
-        }
-      ),
-    ),
+    priority: Array.from({ length: poiCount }, (_, i) => ({
+      if: `in_primary_poi_${i}`,
+      multiply_by: "50",
+    })),
     areas: featureCollection,
     distance_influence: 100,
   };

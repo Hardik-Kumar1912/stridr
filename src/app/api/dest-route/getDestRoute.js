@@ -14,7 +14,7 @@ export async function getDestRoute(
       (_, i) => (
         {
           if: `in_primary_poi_${i}`,
-          multiply_by: "5",
+          multiply_by: "50",
         }
       ),
     ),

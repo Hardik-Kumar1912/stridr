@@ -1,0 +1,304 @@
+{
+  "distance": 4403.766,
+  "weight": 3796.10896,
+  "time": 3170713,
+  "transfers": 0,
+  "points_encoded": true,
+  "points_encoded_multiplier": 100000,
+  "bbox": [
+    77.218104,
+    28.607461,
+    77.233003,
+    28.616181
+  ],
+  "points": "abtmDsekvM@FR~@lBvFhBfFd@|@j@^dB^s@D[~OvFHAR`@@?SnGNAd@tGNNBJHDPJNLHPDTCRLJNl@rBvA~ErAtD^jA`BpEtAnEDV?PELS`@Od@CVGJMF_@F?HKAgDGyEKQ@OFIHE@G@GAECIICOkEIyDMmEO?g@x@ce@M?VeQJqGKIIKEMCQAg@?MHg@LWJGHABuBk@MQQU]G[?]@YH_@aG_E}@k@_BmAe@hAmBjDMr@Ap@@V",
+  "instructions": [
+    {
+      "exit_number": 1,
+      "distance": 301.106,
+      "sign": 6,
+      "exited": true,
+      "turn_angle": 2.82,
+      "interval": [
+        0,
+        4
+      ],
+      "text": "At roundabout, take exit 1",
+      "time": 216796,
+      "street_name": ""
+    },
+    {
+      "distance": 123.67,
+      "sign": -7,
+      "interval": [
+        4,
+        7
+      ],
+      "text": "Keep left",
+      "time": 89042,
+      "street_name": ""
+    },
+    {
+      "distance": 28.283,
+      "sign": 3,
+      "interval": [
+        7,
+        8
+      ],
+      "text": "Turn sharp right",
+      "time": 20364,
+      "street_name": ""
+    },
+    {
+      "distance": 266.005,
+      "sign": -2,
+      "interval": [
+        8,
+        9
+      ],
+      "text": "Turn left",
+      "time": 191524,
+      "street_name": ""
+    },
+    {
+      "distance": 137.745,
+      "sign": -2,
+      "interval": [
+        9,
+        10
+      ],
+      "text": "Turn left",
+      "time": 99176,
+      "street_name": ""
+    },
+    {
+      "distance": 9.478,
+      "sign": 2,
+      "interval": [
+        10,
+        11
+      ],
+      "text": "Turn right",
+      "time": 6824,
+      "street_name": ""
+    },
+    {
+      "distance": 18.067,
+      "sign": -2,
+      "interval": [
+        11,
+        12
+      ],
+      "text": "Turn left onto Man Singh Road",
+      "time": 13008,
+      "street_name": "Man Singh Road"
+    },
+    {
+      "distance": 9.525,
+      "sign": -2,
+      "interval": [
+        12,
+        13
+      ],
+      "text": "Turn left",
+      "time": 6858,
+      "street_name": ""
+    },
+    {
+      "distance": 169.729,
+      "sign": 2,
+      "interval": [
+        13,
+        15
+      ],
+      "text": "Turn right",
+      "time": 122204,
+      "street_name": ""
+    },
+    {
+      "distance": 171.724,
+      "sign": -2,
+      "interval": [
+        15,
+        18
+      ],
+      "text": "Turn left onto Man Singh Road",
+      "time": 123641,
+      "street_name": "Man Singh Road"
+    },
+    {
+      "exit_number": 1,
+      "distance": 655.342,
+      "sign": 6,
+      "exited": true,
+      "turn_angle": -3.17,
+      "interval": [
+        18,
+        34
+      ],
+      "text": "At roundabout, take exit 1 onto Akbar Road",
+      "time": 471847,
+      "street_name": "Akbar Road"
+    },
+    {
+      "exit_number": 1,
+      "distance": 86.176,
+      "sign": 6,
+      "exited": true,
+      "turn_angle": -2.85,
+      "interval": [
+        34,
+        40
+      ],
+      "text": "At roundabout, take exit 1 onto Janpath",
+      "time": 62047,
+      "street_name": "Janpath"
+    },
+    {
+      "distance": 5.121,
+      "sign": -2,
+      "interval": [
+        40,
+        41
+      ],
+      "text": "Turn left",
+      "time": 3687,
+      "street_name": ""
+    },
+    {
+      "distance": 0,
+      "sign": 5,
+      "last_heading": 274.4811613353722,
+      "interval": [
+        41,
+        41
+      ],
+      "text": "Waypoint 1",
+      "time": 0,
+      "street_name": ""
+    },
+    {
+      "distance": 241.842,
+      "heading": 8.91,
+      "sign": 0,
+      "interval": [
+        41,
+        46
+      ],
+      "text": "Continue onto Janpath",
+      "time": 174127,
+      "street_name": "Janpath"
+    },
+    {
+      "exit_number": 2,
+      "distance": 370.777,
+      "sign": 6,
+      "exited": true,
+      "turn_angle": 3.67,
+      "interval": [
+        46,
+        56
+      ],
+      "text": "At roundabout, take exit 2 onto Janpath",
+      "time": 266959,
+      "street_name": "Janpath"
+    },
+    {
+      "distance": 615.82,
+      "sign": 2,
+      "interval": [
+        56,
+        58
+      ],
+      "text": "Turn right",
+      "time": 443391,
+      "street_name": ""
+    },
+    {
+      "distance": 7.917,
+      "sign": -2,
+      "interval": [
+        58,
+        59
+      ],
+      "text": "Turn left onto Man Singh Road",
+      "time": 5700,
+      "street_name": "Man Singh Road"
+    },
+    {
+      "distance": 283.572,
+      "sign": 2,
+      "interval": [
+        59,
+        60
+      ],
+      "text": "Turn right onto Kartavya Path",
+      "time": 204172,
+      "street_name": "Kartavya Path"
+    },
+    {
+      "distance": 299.112,
+      "sign": 0,
+      "interval": [
+        60,
+        72
+      ],
+      "text": "Continue",
+      "time": 215361,
+      "street_name": ""
+    },
+    {
+      "distance": 116.189,
+      "sign": -2,
+      "interval": [
+        72,
+        79
+      ],
+      "text": "Turn left",
+      "time": 83657,
+      "street_name": ""
+    },
+    {
+      "distance": 278.176,
+      "sign": -2,
+      "interval": [
+        79,
+        82
+      ],
+      "text": "Turn left onto Tilak Marg",
+      "time": 200286,
+      "street_name": "Tilak Marg"
+    },
+    {
+      "exit_number": 2,
+      "distance": 208.39,
+      "sign": 6,
+      "exited": false,
+      "turn_angle": 0.8,
+      "interval": [
+        82,
+        87
+      ],
+      "text": "Enter roundabout",
+      "time": 150042,
+      "street_name": ""
+    },
+    {
+      "distance": 0,
+      "sign": 4,
+      "last_heading": 261.55523347722084,
+      "interval": [
+        87,
+        87
+      ],
+      "text": "Arrive at destination",
+      "time": 0,
+      "street_name": ""
+    }
+  ],
+  "legs": [],
+  "details": {},
+  "ascend": 0,
+  "descend": 0,
+  "snapped_waypoints": "abtmDsekvMhr@lpAir@mpA"
+}
