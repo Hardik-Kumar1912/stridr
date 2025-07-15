@@ -13,9 +13,10 @@ import {
 } from "@/components/ui/carousel";
 import getCurrentLocation from "@/utils/getUserLocation.js";
 import { useRoute } from "@/context/RouteContext.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const { user } = useUser();
@@ -25,6 +26,60 @@ export default function Home() {
   const { setRoute } = useRoute();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const TypingStridr = () => {
+    const fullText = "Strider";
+    const correctedText = "Stridr";
+    const [displayText, setDisplayText] = useState("");
+    const [cursorPos, setCursorPos] = useState(0);
+    const [phase, setPhase] = useState("typing");
+
+    useEffect(() => {
+      if (phase === "typing") {
+        if (cursorPos < fullText.length) {
+          const timeout = setTimeout(() => {
+            setDisplayText((prev) => prev + fullText[cursorPos]);
+            setCursorPos((prev) => prev + 1);
+          }, 150);
+          return () => clearTimeout(timeout);
+        } else {
+          setTimeout(() => setPhase("correcting"), 1000);
+        }
+      }
+
+      if (phase === "correcting") {
+        const timeout = setTimeout(() => {
+          setCursorPos(fullText.length - 1);
+          setDisplayText(fullText.slice(0, -1));
+          setTimeout(() => {
+            setPhase("done");
+            setCursorPos(correctedText.length);
+            setDisplayText(correctedText);
+          }, 500);
+        }, 500);
+        return () => clearTimeout(timeout);
+      }
+      if (phase === "done") {
+        const timeout = setTimeout(() => {
+          setCursorPos(correctedText.length);
+          setDisplayText(correctedText);
+        }, 2000);
+        return () => clearTimeout(timeout);
+      }
+    }, [cursorPos, phase]);
+
+    return (
+      <motion.span
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-primary font-mono whitespace-pre"
+      >
+        {displayText}
+        <span className="inline-block w-[1ch] animate-blink">|</span>
+      </motion.span>
+    );
+  };
+
   const routes = [
     {
       title: "Morning Park Loop",
@@ -112,15 +167,15 @@ export default function Home() {
           <div className="w-full max-w-[600px]">
             <img
               src="/hero.png"
-              alt="Strider AI"
+              alt="Stridr AI"
               className="w-full h-auto rounded-xl shadow-xl border border-border cursor-default select-none"
             />
           </div>
 
           {/* Right – Text and Button */}
           <div className="space-y-8 text-center md:text-left">
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight tracking-tight">
-              Meet <span className="text-primary">Strider</span>
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight tracking-tight flex justify-center md:justify-start items-center gap-4">
+              Meet <TypingStridr />
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto md:mx-0">
               Discover personalized jogging and walking routes powered by
